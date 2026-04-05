@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>SpeakRight</title>
-  <meta name="google-site-verification" content="rhtijqT-Ruwv1ougablFpY1Xu6pvZzdri7vkwSlB2Ck" />
+<meta name="google-site-verification" content="rhtijqT-Ruwv1ougablFpY1Xu6pvZzdri7vkwSlB2Ck" />
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -23,6 +23,7 @@ body{font-family:'DM Sans',sans-serif;background:#0F0E17;color:#FFFFFE;min-heigh
 .feature-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px;text-align:center}
 .feature-card .icon{font-size:22px;margin-bottom:6px}
 .feature-card .text{font-size:12px;color:#A7A9BE;font-weight:500}
+.made-by{color:#4ECDC4;font-size:13px;font-weight:700;margin-bottom:16px;letter-spacing:1px}
 .start-btn{background:#4ECDC4;color:#0F0E17;border:none;border-radius:16px;padding:16px 48px;font-size:16px;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer;width:100%;transition:all 0.2s}
 .topic-screen{min-height:100vh;background:#0F0E17;display:flex;flex-direction:column}
 .topic-header{padding:48px 24px 24px}
@@ -133,6 +134,7 @@ if(screen==="welcome")return(
 <div className="feature-card"><div className="icon">🔥</div><div className="text">Daily Streaks</div></div>
 <div className="feature-card"><div className="icon">🎭</div><div className="text">Real Scenarios</div></div>
 </div>
+<p className="made-by">✦ Made by Arshad ✦</p>
 <button className="start-btn" onClick={()=>setScreen("topic")}>Start Practicing →</button>
 </div></div>
 );
