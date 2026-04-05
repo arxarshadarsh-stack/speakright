@@ -13,7 +13,6 @@
 body{font-family:'DM Sans',sans-serif;background:#0F0E17;color:#FFFFFE;min-height:100vh}
 .app{min-height:100vh;max-width:480px;margin:0 auto;display:flex;flex-direction:column}
 .welcome{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;background:#0F0E17;position:relative}
-.welcome::before{content:'';position:absolute;top:-100px;right:-80px;width:300px;height:300px;background:radial-gradient(circle,rgba(78,205,196,0.2) 0%,transparent 70%);pointer-events:none}
 .welcome-logo{font-size:72px;margin-bottom:20px;animation:float 3s ease-in-out infinite}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 .welcome h1{font-family:'Sora',sans-serif;font-size:40px;font-weight:800;color:#FFFFFE;letter-spacing:-1px;margin-bottom:8px}
@@ -24,21 +23,19 @@ body{font-family:'DM Sans',sans-serif;background:#0F0E17;color:#FFFFFE;min-heigh
 .feature-card .icon{font-size:22px;margin-bottom:6px}
 .feature-card .text{font-size:12px;color:#A7A9BE;font-weight:500}
 .start-btn{background:#4ECDC4;color:#0F0E17;border:none;border-radius:16px;padding:16px 48px;font-size:16px;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer;width:100%;transition:all 0.2s}
-.start-btn:hover{background:#3BB5AD;transform:translateY(-2px);box-shadow:0 8px 24px rgba(78,205,196,0.4)}
 .topic-screen{min-height:100vh;background:#0F0E17;display:flex;flex-direction:column}
 .topic-header{padding:48px 24px 24px}
-.topic-header h2{font-family:'Sora',sans-serif;font-size:28px;font-weight:800;margin-bottom:6px;letter-spacing:-0.5px}
+.topic-header h2{font-family:'Sora',sans-serif;font-size:28px;font-weight:800;margin-bottom:6px}
 .topic-header p{color:#A7A9BE;font-size:14px}
 .topics-list{padding:0 20px;flex:1}
 .topic-card{display:flex;align-items:center;gap:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:18px 20px;margin-bottom:12px;cursor:pointer;transition:all 0.2s}
-.topic-card:hover{background:rgba(255,255,255,0.08);transform:translateX(4px)}
 .topic-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
 .topic-name{font-family:'Sora',sans-serif;font-weight:700;font-size:15px;margin-bottom:3px}
 .topic-desc{color:#A7A9BE;font-size:13px}
 .stats-bar{margin:16px 20px 24px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:16px 20px;display:flex;justify-content:space-around}
 .stat{text-align:center}
 .stat-num{font-family:'Sora',sans-serif;font-size:22px;font-weight:800}
-.stat-label{font-size:11px;color:#A7A9BE;margin-top:2px;font-weight:500}
+.stat-label{font-size:11px;color:#A7A9BE;margin-top:2px}
 .chat-screen{min-height:100vh;background:#0F0E17;display:flex;flex-direction:column}
 .chat-header{padding:44px 20px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,0.06)}
 .back-btn{background:rgba(255,255,255,0.06);border:none;color:#FFFFFE;border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;flex-shrink:0}
@@ -52,8 +49,8 @@ body{font-family:'DM Sans',sans-serif;background:#0F0E17;color:#FFFFFE;min-heigh
 .bubble{max-width:78%;padding:12px 16px;border-radius:20px;font-size:14px;line-height:1.55}
 .bubble.user{background:#4ECDC4;color:#0F0E17;border-bottom-right-radius:6px;font-weight:500}
 .bubble.bot{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);color:#FFFFFE;border-bottom-left-radius:6px}
-.correct-tag{font-size:11px;color:#4ECDC4;font-weight:600;margin-top:5px;margin-right:4px}
-.correction-box{max-width:82%;margin-top:6px;background:rgba(255,107,107,0.08);border:1px solid rgba(255,107,107,0.25);border-radius:14px;padding:10px 14px;margin-right:4px}
+.correct-tag{font-size:11px;color:#4ECDC4;font-weight:600;margin-top:5px}
+.correction-box{max-width:82%;margin-top:6px;background:rgba(255,107,107,0.08);border:1px solid rgba(255,107,107,0.25);border-radius:14px;padding:10px 14px}
 .correction-item{margin-bottom:8px}
 .correction-item:last-child{margin-bottom:0}
 .wrong-text{text-decoration:line-through;color:#FF6B6B;font-size:13px;font-weight:600}
@@ -69,7 +66,7 @@ body{font-family:'DM Sans',sans-serif;background:#0F0E17;color:#FFFFFE;min-heigh
 .message-input{flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:12px 16px;color:#FFFFFE;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;resize:none}
 .message-input::placeholder{color:#555770}
 .message-input:focus{border-color:rgba(78,205,196,0.4)}
-.send-btn{width:44px;height:44px;background:#4ECDC4;border:none;border-radius:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;flex-shrink:0;font-size:18px;font-weight:700;color:#0F0E17}
+.send-btn{width:44px;height:44px;background:#4ECDC4;border:none;border-radius:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:18px;font-weight:700;color:#0F0E17}
 .send-btn:disabled{background:rgba(78,205,196,0.3);cursor:not-allowed}
 </style>
 </head>
@@ -97,9 +94,9 @@ const[stats,setStats]=useState({correct:0,mistakes:0,streak:0});
 const endRef=useRef(null);
 useEffect(()=>{endRef.current?.scrollIntoView({behavior:"smooth"})},[msgs,loading]);
 const call=async(h,sys)=>{
-const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:sys,messages:h})});
+const r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:h,system:sys})});
 const d=await r.json();
-return d.content.map(i=>i.text||"").join("");
+return d.content;
 };
 const parse=(t)=>{try{return JSON.parse(t.replace(/```json|```/g,"").trim())}catch{return{reply:t,corrections:[],isCorrect:true}}};
 const startTopic=async(tp)=>{
@@ -131,7 +128,7 @@ if(screen==="welcome")return(
 <p className="welcome-sub">Chat in English. Make mistakes. Learn instantly.</p>
 <div className="features-grid">
 <div className="feature-card"><div className="icon">✍️</div><div className="text">Grammar Correction</div></div>
-<div className="feature-card"><div className="icon">📘</div><div className="text">Error Explanations</div></div>
+<div className="feature-card"><div className="icon">📘</div><div className="text">Explanations</div></div>
 <div className="feature-card"><div className="icon">🔥</div><div className="text">Daily Streaks</div></div>
 <div className="feature-card"><div className="icon">🎭</div><div className="text">Real Scenarios</div></div>
 </div>
@@ -145,7 +142,7 @@ if(screen==="topic")return(
 {TOPICS.map(tp=>(
 <div className="topic-card" key={tp.id} onClick={()=>startTopic(tp)}>
 <div className="topic-icon" style={{background:tp.color+"22"}}>{tp.emoji}</div>
-<div className="topic-info"><div className="topic-name">{tp.label}</div><div className="topic-desc">{tp.description}</div></div>
+<div style={{flex:1}}><div className="topic-name">{tp.label}</div><div className="topic-desc">{tp.description}</div></div>
 <div style={{color:"#A7A9BE",fontSize:18}}>›</div>
 </div>
 ))}
