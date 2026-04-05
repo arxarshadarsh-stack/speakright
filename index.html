@@ -25,12 +25,26 @@ body{font-family:'DM Sans',sans-serif;background:#0F0E17;color:#FFFFFE;min-heigh
 .feature-card .text{font-size:12px;color:#A7A9BE;font-weight:500}
 .made-by{color:#4ECDC4;font-size:13px;font-weight:700;margin-bottom:16px;letter-spacing:1px}
 .start-btn{background:#4ECDC4;color:#0F0E17;border:none;border-radius:16px;padding:16px 48px;font-size:16px;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer;width:100%;transition:all 0.2s}
+.start-btn:hover{background:#3BB5AD;transform:translateY(-2px)}
+.level-screen{min-height:100vh;background:#0F0E17;display:flex;flex-direction:column;padding:0}
+.level-header{padding:48px 24px 24px}
+.level-header h2{font-family:'Sora',sans-serif;font-size:28px;font-weight:800;margin-bottom:6px;letter-spacing:-0.5px}
+.level-header p{color:#A7A9BE;font-size:14px}
+.levels-list{padding:0 20px;flex:1}
+.level-card{display:flex;align-items:center;gap:16px;border-radius:18px;padding:20px;margin-bottom:12px;cursor:pointer;transition:all 0.2s;border:2px solid transparent}
+.level-card:hover{transform:translateX(4px)}
+.level-icon{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+.level-info{flex:1}
+.level-name{font-family:'Sora',sans-serif;font-weight:700;font-size:16px;margin-bottom:4px}
+.level-desc{font-size:13px;opacity:0.8}
 .topic-screen{min-height:100vh;background:#0F0E17;display:flex;flex-direction:column}
 .topic-header{padding:48px 24px 24px}
 .topic-header h2{font-family:'Sora',sans-serif;font-size:28px;font-weight:800;margin-bottom:6px}
 .topic-header p{color:#A7A9BE;font-size:14px}
+.level-badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:12px}
 .topics-list{padding:0 20px;flex:1}
 .topic-card{display:flex;align-items:center;gap:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:18px 20px;margin-bottom:12px;cursor:pointer;transition:all 0.2s}
+.topic-card:hover{background:rgba(255,255,255,0.08);transform:translateX(4px)}
 .topic-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
 .topic-name{font-family:'Sora',sans-serif;font-weight:700;font-size:15px;margin-bottom:3px}
 .topic-desc{color:#A7A9BE;font-size:13px}
@@ -76,17 +90,55 @@ body{font-family:'DM Sans',sans-serif;background:#0F0E17;color:#FFFFFE;min-heigh
 <div id="root"></div>
 <script type="text/babel">
 const{useState,useRef,useEffect}=React;
+const LEVELS=[
+{id:"easy",emoji:"🌱",label:"Easy",desc:"For beginners — gentle corrections only",color:"#4ECDC4",bg:"rgba(78,205,196,0.1)",border:"rgba(78,205,196,0.3)"},
+{id:"intermediate",emoji:"🔥",label:"Intermediate",desc:"Balanced — good for everyday learners",color:"#FFD93D",bg:"rgba(255,217,61,0.1)",border:"rgba(255,217,61,0.3)"},
+{id:"advanced",emoji:"⚡",label:"Advanced",desc:"Pro level — strict grammar & punctuation",color:"#FF6B6B",bg:"rgba(255,107,107,0.1)",border:"rgba(255,107,107,0.3)"},
+];
 const TOPICS=[
 {id:"random",emoji:"💬",label:"Random Chat",description:"Casual everyday conversation",color:"#4ECDC4"},
 {id:"job",emoji:"💼",label:"Job Interview",description:"Practice professional English",color:"#FF6B6B"},
 {id:"restaurant",emoji:"🍽️",label:"At a Restaurant",description:"Order food, talk to staff",color:"#FFD93D"},
 {id:"student",emoji:"🎓",label:"Student Life",description:"School & college conversations",color:"#A78BFA"},
 ];
-const getSys=(t)=>`You are an English learning conversation partner. Scenario: ${t}. Reply ONLY with raw JSON. No text before or after.
-Format: {"reply":"your response","corrections":[{"wrong":"exact wrong phrase","correct":"corrected","explanation":"why"}],"isCorrect":true/false}
-Check tense,articles,prepositions,spelling. Empty array if no mistakes.`;
+const getSys=(topic,level)=>{
+const rules={
+easy:`You are a kind and encouraging English conversation partner for BEGINNERS. Scenario: ${topic}.
+Reply ONLY with raw JSON. Format: {"reply":"your friendly response","corrections":[{"wrong":"exact wrong phrase","correct":"corrected version","explanation":"simple, encouraging explanation"}],"isCorrect":true/false}
+EASY LEVEL RULES - Only correct MAJOR mistakes:
+- Wrong tense (I goed → I went)
+- Missing important words (She going → She is going)
+- Very wrong grammar that changes meaning
+- Basic punctuation (missing period or question mark at end)
+DO NOT correct: word choice, informal words, small style issues, if meaning is clear
+Be very encouraging! Use simple words in your reply. Max 1-2 corrections per message.`,
+intermediate:`You are a helpful English conversation partner for INTERMEDIATE learners. Scenario: ${topic}.
+Reply ONLY with raw JSON. Format: {"reply":"your response","corrections":[{"wrong":"exact wrong phrase","correct":"corrected version","explanation":"clear explanation"}],"isCorrect":true/false}
+INTERMEDIATE LEVEL RULES - Correct moderate mistakes:
+- Tense errors
+- Subject-verb agreement
+- Missing or wrong articles (a/an/the)
+- Wrong prepositions
+- Punctuation errors (commas, periods, question marks)
+- Informal words when formal is better
+Keep corrections balanced — not too strict, not too easy. Max 2-3 corrections per message.`,
+advanced:`You are a strict English conversation partner for ADVANCED learners. Scenario: ${topic}.
+Reply ONLY with raw JSON. Format: {"reply":"your response","corrections":[{"wrong":"exact wrong phrase","correct":"corrected version","explanation":"detailed explanation"}],"isCorrect":true/false}
+ADVANCED LEVEL RULES - Correct ALL mistakes strictly:
+- All grammar errors
+- All tense errors
+- All punctuation (commas, periods, semicolons, apostrophes, question marks)
+- Word choice and vocabulary
+- Sentence structure
+- Formal vs informal register
+- Spelling mistakes
+Be thorough and professional. Correct everything.`
+};
+return rules[level];
+};
 function App(){
 const[screen,setScreen]=useState("welcome");
+const[level,setLevel]=useState(null);
 const[topic,setTopic]=useState(null);
 const[msgs,setMsgs]=useState([]);
 const[input,setInput]=useState("");
@@ -101,10 +153,11 @@ const d=await r.json();
 return d.content;
 };
 const parse=(t)=>{try{return JSON.parse(t.replace(/```json|```/g,"").trim())}catch{return{reply:t,corrections:[],isCorrect:true}}};
+const selectLevel=(lv)=>{setLevel(lv);setScreen("topic")};
 const startTopic=async(tp)=>{
 setTopic(tp);setMsgs([]);setHist([]);setScreen("chat");setLoading(true);
 const h=[{role:"user",content:"Start the conversation with a natural opening line."}];
-const text=await call(h,getSys(tp.label));
+const text=await call(h,getSys(tp.label,level.id));
 const p=parse(text);
 setMsgs([{role:"bot",content:p.reply}]);
 setHist([...h,{role:"assistant",content:text}]);
@@ -116,7 +169,7 @@ const m=input.trim();setInput("");setLoading(true);
 const entry={role:"user",content:m,corrections:null,isCorrect:null};
 setMsgs(prev=>[...prev,entry]);
 const nh=[...hist,{role:"user",content:m}];
-const text=await call(nh,getSys(topic.label));
+const text=await call(nh,getSys(topic.label,level.id));
 const p=parse(text);
 setStats(prev=>({correct:p.isCorrect?prev.correct+1:prev.correct,mistakes:prev.mistakes+(p.corrections?.length||0),streak:p.isCorrect?prev.streak+1:0}));
 setMsgs(prev=>{const u=[...prev];u[u.length-1]={...entry,corrections:p.corrections||[],isCorrect:p.isCorrect};return[...u,{role:"bot",content:p.reply}]});
@@ -135,12 +188,36 @@ if(screen==="welcome")return(
 <div className="feature-card"><div className="icon">🎭</div><div className="text">Real Scenarios</div></div>
 </div>
 <p className="made-by">✦ Made by Arshad ✦</p>
-<button className="start-btn" onClick={()=>setScreen("topic")}>Start Practicing →</button>
+<button className="start-btn" onClick={()=>setScreen("level")}>Start Practicing →</button>
+</div></div>
+);
+if(screen==="level")return(
+<div className="app"><div className="level-screen">
+<div className="level-header">
+<h2>Choose Your Level</h2>
+<p>Pick the level that matches your English</p>
+</div>
+<div className="levels-list">
+{LEVELS.map(lv=>(
+<div className="level-card" key={lv.id} onClick={()=>selectLevel(lv)} style={{background:lv.bg,border:`2px solid ${lv.border}`}}>
+<div className="level-icon" style={{background:lv.color+"33"}}>{lv.emoji}</div>
+<div className="level-info">
+<div className="level-name" style={{color:lv.color}}>{lv.label}</div>
+<div className="level-desc" style={{color:"#A7A9BE"}}>{lv.desc}</div>
+</div>
+<div style={{color:"#A7A9BE",fontSize:20}}>›</div>
+</div>
+))}
+</div>
 </div></div>
 );
 if(screen==="topic")return(
 <div className="app"><div className="topic-screen">
-<div className="topic-header"><h2>Choose a Scenario</h2><p>Pick a situation to practice</p></div>
+<div className="topic-header">
+<div className="level-badge" style={{background:level.bg,color:level.color,border:`1px solid ${level.border}`}}>{level.emoji} {level.label} Level</div>
+<h2>Choose a Scenario</h2>
+<p>Pick a situation to practice</p>
+</div>
 <div className="topics-list">
 {TOPICS.map(tp=>(
 <div className="topic-card" key={tp.id} onClick={()=>startTopic(tp)}>
@@ -161,7 +238,7 @@ return(
 <div className="app"><div className="chat-screen">
 <div className="chat-header">
 <button className="back-btn" onClick={()=>setScreen("topic")}>‹</button>
-<div style={{flex:1}}><div className="chat-topic-name">{topic?.emoji} {topic?.label}</div><div className="chat-topic-sub">Intermediate • Corrections ON</div></div>
+<div style={{flex:1}}><div className="chat-topic-name">{topic?.emoji} {topic?.label}</div><div className="chat-topic-sub">{level?.emoji} {level?.label} • Corrections ON</div></div>
 <div className="streak-badge">🔥{stats.streak}</div>
 </div>
 <div className="messages">
