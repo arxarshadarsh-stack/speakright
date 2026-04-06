@@ -26,17 +26,16 @@ body{font-family:'DM Sans',sans-serif;background:#0F0E17;color:#FFFFFE;min-heigh
 .made-by{color:#4ECDC4;font-size:13px;font-weight:700;margin-bottom:16px;letter-spacing:1px}
 .start-btn{background:#4ECDC4;color:#0F0E17;border:none;border-radius:16px;padding:16px 48px;font-size:16px;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer;width:100%;transition:all 0.2s}
 .start-btn:hover{background:#3BB5AD;transform:translateY(-2px)}
-.level-screen{min-height:100vh;background:#0F0E17;display:flex;flex-direction:column;padding:0}
+.level-screen{min-height:100vh;background:#0F0E17;display:flex;flex-direction:column}
 .level-header{padding:48px 24px 24px}
-.level-header h2{font-family:'Sora',sans-serif;font-size:28px;font-weight:800;margin-bottom:6px;letter-spacing:-0.5px}
+.level-header h2{font-family:'Sora',sans-serif;font-size:28px;font-weight:800;margin-bottom:6px}
 .level-header p{color:#A7A9BE;font-size:14px}
 .levels-list{padding:0 20px;flex:1}
 .level-card{display:flex;align-items:center;gap:16px;border-radius:18px;padding:20px;margin-bottom:12px;cursor:pointer;transition:all 0.2s;border:2px solid transparent}
 .level-card:hover{transform:translateX(4px)}
 .level-icon{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
-.level-info{flex:1}
 .level-name{font-family:'Sora',sans-serif;font-weight:700;font-size:16px;margin-bottom:4px}
-.level-desc{font-size:13px;opacity:0.8}
+.level-desc{font-size:13px;color:#A7A9BE}
 .topic-screen{min-height:100vh;background:#0F0E17;display:flex;flex-direction:column}
 .topic-header{padding:48px 24px 24px}
 .topic-header h2{font-family:'Sora',sans-serif;font-size:28px;font-weight:800;margin-bottom:6px}
@@ -66,13 +65,21 @@ body{font-family:'DM Sans',sans-serif;background:#0F0E17;color:#FFFFFE;min-heigh
 .bubble.user{background:#4ECDC4;color:#0F0E17;border-bottom-right-radius:6px;font-weight:500}
 .bubble.bot{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);color:#FFFFFE;border-bottom-left-radius:6px}
 .correct-tag{font-size:11px;color:#4ECDC4;font-weight:600;margin-top:5px}
-.correction-box{max-width:82%;margin-top:6px;background:rgba(255,107,107,0.08);border:1px solid rgba(255,107,107,0.25);border-radius:14px;padding:10px 14px}
-.correction-item{margin-bottom:8px}
-.correction-item:last-child{margin-bottom:0}
-.wrong-text{text-decoration:line-through;color:#FF6B6B;font-size:13px;font-weight:600}
-.arrow{color:#A7A9BE;font-size:13px;margin:0 4px}
-.correct-text{color:#4ECDC4;font-size:13px;font-weight:700}
-.explain-text{font-size:12px;color:#A7A9BE;margin-top:3px}
+.correction-box{max-width:90%;margin-top:6px;background:#1a1a2e;border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:12px 14px}
+.sentence-display{font-size:14px;line-height:1.8;margin-bottom:8px;flex-wrap:wrap;display:flex;gap:2px;align-items:baseline}
+.word-correct{color:#4ECDC4;font-weight:600}
+.word-wrong{color:#FF6B6B;text-decoration:line-through;font-weight:600}
+.word-normal{color:#FFFFFE}
+.correction-item{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.correction-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.correction-wrong{color:#FF6B6B;font-size:13px;font-weight:600;text-decoration:line-through}
+.correction-arrow{color:#A7A9BE;font-size:13px;margin:0 6px}
+.correction-right{color:#4ECDC4;font-size:13px;font-weight:700}
+.correction-suggest{color:#FFB347;font-size:13px;font-weight:600}
+.correction-explain{font-size:12px;color:#A7A9BE;margin-top:4px;line-height:1.5}
+.type-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;margin-bottom:4px}
+.type-error{background:rgba(255,107,107,0.2);color:#FF6B6B}
+.type-suggest{background:rgba(255,179,71,0.2);color:#FFB347}
 .typing-dots{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:20px;border-bottom-left-radius:6px;padding:14px 18px;display:flex;gap:5px;align-items:center}
 .dot{width:7px;height:7px;background:#A7A9BE;border-radius:50%;animation:bounce 1.2s infinite}
 .dot:nth-child(2){animation-delay:0.2s}
@@ -101,40 +108,56 @@ const TOPICS=[
 {id:"restaurant",emoji:"🍽️",label:"At a Restaurant",description:"Order food, talk to staff",color:"#FFD93D"},
 {id:"student",emoji:"🎓",label:"Student Life",description:"School & college conversations",color:"#A78BFA"},
 ];
-const getSys=(topic,level)=>{
+const getSys=(topic,level,topicId)=>{
+const informal=topicId==="random"?"Reply in a casual, friendly, informal way like a real friend texting. Use natural conversational language.":"Reply in a natural, context-appropriate way.";
 const rules={
-easy:`You are a kind and encouraging English conversation partner for BEGINNERS. Scenario: ${topic}.
-Reply ONLY with raw JSON. Format: {"reply":"your friendly response","corrections":[{"wrong":"exact wrong phrase","correct":"corrected version","explanation":"simple, encouraging explanation"}],"isCorrect":true/false}
-EASY LEVEL RULES - Only correct MAJOR mistakes:
-- Wrong tense (I goed → I went)
-- Missing important words (She going → She is going)
-- Very wrong grammar that changes meaning
-- Basic punctuation (missing period or question mark at end)
-DO NOT correct: word choice, informal words, small style issues, if meaning is clear
-Be very encouraging! Use simple words in your reply. Max 1-2 corrections per message.`,
-intermediate:`You are a helpful English conversation partner for INTERMEDIATE learners. Scenario: ${topic}.
-Reply ONLY with raw JSON. Format: {"reply":"your response","corrections":[{"wrong":"exact wrong phrase","correct":"corrected version","explanation":"clear explanation"}],"isCorrect":true/false}
-INTERMEDIATE LEVEL RULES - Correct moderate mistakes:
-- Tense errors
-- Subject-verb agreement
-- Missing or wrong articles (a/an/the)
-- Wrong prepositions
-- Punctuation errors (commas, periods, question marks)
-- Informal words when formal is better
-Keep corrections balanced — not too strict, not too easy. Max 2-3 corrections per message.`,
-advanced:`You are a strict English conversation partner for ADVANCED learners. Scenario: ${topic}.
-Reply ONLY with raw JSON. Format: {"reply":"your response","corrections":[{"wrong":"exact wrong phrase","correct":"corrected version","explanation":"detailed explanation"}],"isCorrect":true/false}
-ADVANCED LEVEL RULES - Correct ALL mistakes strictly:
-- All grammar errors
-- All tense errors
-- All punctuation (commas, periods, semicolons, apostrophes, question marks)
-- Word choice and vocabulary
-- Sentence structure
-- Formal vs informal register
-- Spelling mistakes
-Be thorough and professional. Correct everything.`
+easy:`You are a kind English conversation partner for BEGINNERS. Scenario: ${topic}. ${informal}
+Reply ONLY with raw JSON. No text outside JSON.
+Format: {"reply":"your response","corrections":[{"wrong":"ONLY the incorrect word or phrase — never the whole sentence","correct":"corrected version","explanation":"simple friendly explanation","type":"error"}],"isCorrect":true/false}
+EASY RULES:
+- ONLY correct major errors: wrong tense, missing key words, very wrong grammar
+- "Nothing happened" is CORRECT. "It is good" alone is CORRECT. Do not change correct sentences.
+- NEVER correct word choice if meaning is clear
+- NEVER suggest synonyms as corrections
+- Only mark the WRONG WORD OR PHRASE — never the whole sentence
+- Max 1 correction per message
+- If sentence is correct, return empty array [] and isCorrect:true`,
+intermediate:`You are a helpful English conversation partner for INTERMEDIATE learners. Scenario: ${topic}. ${informal}
+Reply ONLY with raw JSON. No text outside JSON.
+Format: {"reply":"your response","corrections":[{"wrong":"ONLY the incorrect word or phrase","correct":"corrected version","explanation":"clear explanation","type":"error or suggestion"}],"isCorrect":true/false}
+INTERMEDIATE RULES:
+- Correct real grammar mistakes only: tense errors, subject-verb agreement, wrong articles, missing words
+- "Nothing happened" is CORRECT. Do not change it.
+- Only use type "suggestion" for style improvements — never mark suggestions as errors
+- NEVER correct informal words in casual chat
+- Only mark the WRONG PART — not the whole sentence
+- Max 2 corrections per message
+- Punctuation: only correct if missing completely`,
+advanced:`You are a strict English conversation partner for ADVANCED learners. Scenario: ${topic}. ${informal}
+Reply ONLY with raw JSON. No text outside JSON.
+Format: {"reply":"your response","corrections":[{"wrong":"ONLY the incorrect word or phrase","correct":"corrected version","explanation":"detailed explanation","type":"error or suggestion"}],"isCorrect":true/false}
+ADVANCED RULES:
+- Correct ALL real mistakes strictly
+- Grammar, tense, punctuation, articles, prepositions, spelling
+- Use type "error" for real mistakes, "suggestion" for improvements
+- Only mark the WRONG PART — never the whole sentence
+- "Nothing happened" is correct — do not change it unless context is wrong
+- Punctuation: correct all punctuation errors`
 };
 return rules[level];
+};
+const highlightSentence=(sentence,corrections)=>{
+if(!corrections||corrections.length===0)return null;
+let result=sentence;
+corrections.forEach(c=>{result=result.replace(c.wrong,`%%WRONG%%${c.wrong}%%ENDWRONG%%`)});
+const parts=result.split(/(%%WRONG%%.*?%%ENDWRONG%%)/g);
+return parts.map((part,i)=>{
+if(part.startsWith("%%WRONG%%")){
+const word=part.replace("%%WRONG%%","").replace("%%ENDWRONG%%","");
+return React.createElement("span",{key:i,className:"word-wrong"},word);
+}
+return React.createElement("span",{key:i,className:"word-normal"},part);
+});
 };
 function App(){
 const[screen,setScreen]=useState("welcome");
@@ -157,7 +180,7 @@ const selectLevel=(lv)=>{setLevel(lv);setScreen("topic")};
 const startTopic=async(tp)=>{
 setTopic(tp);setMsgs([]);setHist([]);setScreen("chat");setLoading(true);
 const h=[{role:"user",content:"Start the conversation with a natural opening line."}];
-const text=await call(h,getSys(tp.label,level.id));
+const text=await call(h,getSys(tp.label,level.id,tp.id));
 const p=parse(text);
 setMsgs([{role:"bot",content:p.reply}]);
 setHist([...h,{role:"assistant",content:text}]);
@@ -169,7 +192,7 @@ const m=input.trim();setInput("");setLoading(true);
 const entry={role:"user",content:m,corrections:null,isCorrect:null};
 setMsgs(prev=>[...prev,entry]);
 const nh=[...hist,{role:"user",content:m}];
-const text=await call(nh,getSys(topic.label,level.id));
+const text=await call(nh,getSys(topic.label,level.id,topic.id));
 const p=parse(text);
 setStats(prev=>({correct:p.isCorrect?prev.correct+1:prev.correct,mistakes:prev.mistakes+(p.corrections?.length||0),streak:p.isCorrect?prev.streak+1:0}));
 setMsgs(prev=>{const u=[...prev];u[u.length-1]={...entry,corrections:p.corrections||[],isCorrect:p.isCorrect};return[...u,{role:"bot",content:p.reply}]});
@@ -193,18 +216,12 @@ if(screen==="welcome")return(
 );
 if(screen==="level")return(
 <div className="app"><div className="level-screen">
-<div className="level-header">
-<h2>Choose Your Level</h2>
-<p>Pick the level that matches your English</p>
-</div>
+<div className="level-header"><h2>Choose Your Level</h2><p>Pick the level that matches your English</p></div>
 <div className="levels-list">
 {LEVELS.map(lv=>(
 <div className="level-card" key={lv.id} onClick={()=>selectLevel(lv)} style={{background:lv.bg,border:`2px solid ${lv.border}`}}>
 <div className="level-icon" style={{background:lv.color+"33"}}>{lv.emoji}</div>
-<div className="level-info">
-<div className="level-name" style={{color:lv.color}}>{lv.label}</div>
-<div className="level-desc" style={{color:"#A7A9BE"}}>{lv.desc}</div>
-</div>
+<div style={{flex:1}}><div className="level-name" style={{color:lv.color}}>{lv.label}</div><div className="level-desc">{lv.desc}</div></div>
 <div style={{color:"#A7A9BE",fontSize:20}}>›</div>
 </div>
 ))}
@@ -215,8 +232,7 @@ if(screen==="topic")return(
 <div className="app"><div className="topic-screen">
 <div className="topic-header">
 <div className="level-badge" style={{background:level.bg,color:level.color,border:`1px solid ${level.border}`}}>{level.emoji} {level.label} Level</div>
-<h2>Choose a Scenario</h2>
-<p>Pick a situation to practice</p>
+<h2>Choose a Scenario</h2><p>Pick a situation to practice</p>
 </div>
 <div className="topics-list">
 {TOPICS.map(tp=>(
@@ -245,15 +261,25 @@ return(
 {msgs.map((msg,i)=>(
 <div key={i} className={`message-row ${msg.role}`}>
 <div className={`bubble ${msg.role}`}>{msg.content}</div>
-{msg.role==="user"&&msg.isCorrect===true&&msg.corrections!==null&&<div className="correct-tag">✅ Perfect sentence!</div>}
+{msg.role==="user"&&msg.isCorrect===true&&msg.corrections!==null&&(
+<div style={{fontSize:11,color:"#4ECDC4",fontWeight:600,marginTop:5}}>✅ Perfect sentence!</div>
+)}
 {msg.role==="user"&&msg.corrections&&msg.corrections.length>0&&(
 <div className="correction-box">
+<div className="sentence-display">
+{highlightSentence(msg.content,msg.corrections)||msg.content}
+</div>
 {msg.corrections.map((c,j)=>(
 <div key={j} className="correction-item">
-<span className="wrong-text">{c.wrong}</span>
-<span className="arrow">→</span>
-<span className="correct-text">{c.correct}</span>
-<div className="explain-text">📘 {c.explanation}</div>
+<div className={`type-badge ${c.type==="suggestion"?"type-suggest":"type-error"}`}>
+{c.type==="suggestion"?"💡 Suggestion":"❌ Error"}
+</div>
+<div>
+<span className="correction-wrong">{c.wrong}</span>
+<span className="correction-arrow">→</span>
+<span className={c.type==="suggestion"?"correction-suggest":"correction-right"}>{c.correct}</span>
+</div>
+<div className="correction-explain">📘 {c.explanation}</div>
 </div>
 ))}
 </div>
