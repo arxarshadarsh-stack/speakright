@@ -182,6 +182,15 @@ setTopic(tp);setMsgs([]);setHist([]);setScreen("chat");setLoading(true);
 const h=[{role:"user",content:"Start the conversation with a natural opening line."}];
 const text=await call(h,getSys(tp.label,level.id,tp.id));
 const p=parse(text);
+  const buildCorrectSentence = (original, corrections) => {
+  let result = original;
+  corrections?.forEach(c => {
+    result = result.replace(c.wrong, c.correct);
+  });
+  return result;
+};
+
+const correctedSentence = buildCorrectSentence(m, p.corrections);
 setMsgs([{role:"bot",content:p.reply}]);
 setHist([...h,{role:"assistant",content:text}]);
 setLoading(false);
@@ -195,7 +204,16 @@ const nh=[...hist,{role:"user",content:m}];
 const text=await call(nh,getSys(topic.label,level.id,topic.id));
 const p=parse(text);
 setStats(prev=>({correct:p.isCorrect?prev.correct+1:prev.correct,mistakes:prev.mistakes+(p.corrections?.length||0),streak:p.isCorrect?prev.streak+1:0}));
-setMsgs(prev=>{const u=[...prev];u[u.length-1]={...entry,corrections:p.corrections||[],isCorrect:p.isCorrect};return[...u,{role:"bot",content:p.reply}]});
+const buildCorrectSentence = (original, corrections) => {
+  let result = original;
+  corrections?.forEach(c => {
+    result = result.replace(c.wrong, c.correct);
+  });
+  return result;
+};
+
+const correctedSentence = buildCorrectSentence(m, p.corrections);
+  setMsgs(prev=>{const u=[...prev];u[u.length-1]={...entry,corrections:p.corrections||[],isCorrect:p.isCorrect,correctedSentence};return[...u,{role:"bot",content:p.reply}]});
 setHist([...nh,{role:"assistant",content:text}]);
 setLoading(false);
 };
@@ -265,8 +283,12 @@ return(
 <div style={{fontSize:11,color:"#4ECDC4",fontWeight:600,marginTop:5}}>✅ Perfect sentence!</div>
 )}
 {msg.role==="user"&&msg.corrections&&msg.corrections.length>0&&(
-<div className="correction-box">
-<div className="sentence-display">
+<div className="correction-box">{msg.correctedSentence && (
+  <div style={{marginTop:8,color:"#4ECDC4",fontWeight:600}}>
+    ✅ Full sentence: {msg.correctedSentence}
+  </div>
+)}
+  <div className="sentence-display">
 {highlightSentence(msg.content,msg.corrections)||msg.content}
 </div>
 {msg.corrections.map((c,j)=>(
