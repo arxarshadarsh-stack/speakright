@@ -3,377 +3,357 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>SpeakRight</title>
+<title>SpeakRight — Speak English with AI</title>
 <meta name="google-site-verification" content="rhtijqT-Ruwv1ougablFpY1Xu6pvZzdri7vkwSlB2Ck" />
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
+:root{
+  --bg:#08090E;
+  --surface:#0F1118;
+  --surface2:#161820;
+  --border:rgba(255,255,255,0.07);
+  --text:#F0F0FF;
+  --muted:#6B6D85;
+  --accent:#6C63FF;
+  --green:#00D4AA;
+  --yellow:#FFD166;
+  --red:#FF6B6B;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:#0F0E17;color:#FFFFFE;min-height:100vh}
-.app{min-height:100vh;max-width:480px;margin:0 auto;display:flex;flex-direction:column}
-.welcome{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;background:#0F0E17;position:relative}
-.welcome-logo{font-size:72px;margin-bottom:20px;animation:float 3s ease-in-out infinite}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.app{min-height:100vh;max-width:440px;margin:0 auto;display:flex;flex-direction:column}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.welcome h1{font-family:'Sora',sans-serif;font-size:40px;font-weight:800;color:#FFFFFE;letter-spacing:-1px;margin-bottom:8px}
-.welcome h1 span{color:#4ECDC4}
-.welcome-sub{color:#A7A9BE;font-size:15px;text-align:center;line-height:1.6;margin-bottom:32px;max-width:280px}
-.features-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:36px;width:100%}
-.feature-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px;text-align:center}
-.feature-card .icon{font-size:22px;margin-bottom:6px}
-.feature-card .text{font-size:12px;color:#A7A9BE;font-weight:500}
-.made-by{color:#4ECDC4;font-size:13px;font-weight:700;margin-bottom:16px;letter-spacing:1px}
-.start-btn{background:#4ECDC4;color:#0F0E17;border:none;border-radius:16px;padding:16px 48px;font-size:16px;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer;width:100%;transition:all 0.2s}
-.start-btn:hover{background:#3BB5AD;transform:translateY(-2px)}
-.level-screen{min-height:100vh;background:#0F0E17;display:flex;flex-direction:column}
-.level-header{padding:48px 24px 24px}
-.level-header h2{font-family:'Sora',sans-serif;font-size:28px;font-weight:800;margin-bottom:6px}
-.level-header p{color:#A7A9BE;font-size:14px}
-.levels-list{padding:0 20px;flex:1}
-.level-card{display:flex;align-items:center;gap:16px;border-radius:18px;padding:20px;margin-bottom:12px;cursor:pointer;transition:all 0.2s;border:2px solid transparent}
-.level-card:hover{transform:translateX(4px)}
-.level-icon{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
-.level-name{font-family:'Sora',sans-serif;font-weight:700;font-size:16px;margin-bottom:4px}
-.level-desc{font-size:13px;color:#A7A9BE}
-.topic-screen{min-height:100vh;background:#0F0E17;display:flex;flex-direction:column}
-.topic-header{padding:48px 24px 24px}
-.topic-header h2{font-family:'Sora',sans-serif;font-size:28px;font-weight:800;margin-bottom:6px}
-.topic-header p{color:#A7A9BE;font-size:14px}
-.level-badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:12px}
-.topics-list{padding:0 20px;flex:1}
-.topic-card{display:flex;align-items:center;gap:16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:18px 20px;margin-bottom:12px;cursor:pointer;transition:all 0.2s}
-.topic-card:hover{background:rgba(255,255,255,0.08);transform:translateX(4px)}
-.topic-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
-.topic-name{font-family:'Sora',sans-serif;font-weight:700;font-size:15px;margin-bottom:3px}
-.topic-desc{color:#A7A9BE;font-size:13px}
-.stats-bar{margin:16px 20px 24px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:16px 20px;display:flex;justify-content:space-around}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-7px)}}
+@keyframes glow{0%,100%{box-shadow:0 0 24px rgba(108,99,255,0.3)}50%{box-shadow:0 0 48px rgba(108,99,255,0.55)}}
+@keyframes pop{0%{transform:scale(0.94);opacity:0}100%{transform:scale(1);opacity:1}}
+.a1{animation:fadeUp 0.45s 0.05s ease both}
+.a2{animation:fadeUp 0.45s 0.15s ease both}
+.a3{animation:fadeUp 0.45s 0.25s ease both}
+.a4{animation:fadeUp 0.45s 0.35s ease both}
+.a5{animation:fadeUp 0.45s 0.45s ease both}
+.a6{animation:fadeUp 0.45s 0.55s ease both}
+
+/* WELCOME */
+.welcome{min-height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.glow1{position:absolute;top:-80px;left:-80px;width:360px;height:360px;background:radial-gradient(circle,rgba(108,99,255,0.18) 0%,transparent 70%);pointer-events:none}
+.glow2{position:absolute;bottom:0;right:-60px;width:280px;height:280px;background:radial-gradient(circle,rgba(255,107,157,0.14) 0%,transparent 70%);pointer-events:none}
+.welcome-inner{position:relative;z-index:1;display:flex;flex-direction:column;flex:1;padding:56px 26px 40px}
+.logo-badge{display:inline-flex;align-items:center;justify-content:center;width:86px;height:86px;background:linear-gradient(135deg,rgba(108,99,255,0.22),rgba(255,107,157,0.18));border:1px solid rgba(108,99,255,0.35);border-radius:26px;font-size:40px;margin-bottom:24px;animation:float 3.2s ease-in-out infinite;box-shadow:0 8px 32px rgba(108,99,255,0.18)}
+.tag-pill{display:inline-block;background:rgba(108,99,255,0.14);border:1px solid rgba(108,99,255,0.28);color:#A89FFF;font-size:11px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:14px}
+.welcome h1{font-size:36px;font-weight:800;line-height:1.18;letter-spacing:-1.2px;margin-bottom:12px}
+.welcome h1 em{font-style:normal;background:linear-gradient(135deg,#6C63FF 30%,#FF6B9D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.welcome-sub{color:var(--muted);font-size:14.5px;line-height:1.65;margin-bottom:32px;max-width:310px}
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:30px}
+.feat-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px 14px;transition:border-color 0.2s}
+.feat-card:hover{border-color:rgba(108,99,255,0.3)}
+.feat-icon{font-size:22px;margin-bottom:8px}
+.feat-name{font-size:13px;font-weight:700;margin-bottom:2px}
+.feat-text{font-size:11px;color:var(--muted);line-height:1.4}
+.made-by{text-align:center;font-size:12px;color:var(--muted);margin-bottom:14px}
+.made-by b{color:var(--accent)}
+.start-btn{width:100%;background:linear-gradient(135deg,#6C63FF,#8B7FFF);color:#fff;border:none;border-radius:16px;padding:17px;font-size:15.5px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all 0.25s;animation:glow 2.5s ease-in-out infinite}
+.start-btn:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.start-btn:active{transform:translateY(1px)}
+
+/* LEVEL */
+.level-screen{min-height:100vh;background:var(--bg);display:flex;flex-direction:column}
+.top-header{padding:52px 22px 20px}
+.top-header h2{font-size:26px;font-weight:800;letter-spacing:-0.6px;margin-bottom:4px}
+.top-header p{color:var(--muted);font-size:13.5px}
+.back-btn{background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:12px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;margin-bottom:20px;transition:all 0.2s}
+.back-btn:hover{background:var(--surface2)}
+.levels-list{padding:4px 20px;flex:1}
+.level-card{display:flex;align-items:center;gap:14px;border-radius:20px;padding:18px;margin-bottom:11px;cursor:pointer;transition:all 0.22s;border:1.5px solid transparent;position:relative}
+.level-card:hover{transform:translateX(5px)}
+.level-card-arrow{color:rgba(255,255,255,0.25);font-size:22px;margin-left:auto;transition:all 0.2s}
+.level-card:hover .level-card-arrow{color:rgba(255,255,255,0.7)}
+.level-icon{width:54px;height:54px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+.level-name{font-weight:800;font-size:16px;margin-bottom:3px}
+.level-desc{font-size:12.5px;color:var(--muted)}
+
+/* TOPIC */
+.topic-screen{min-height:100vh;background:var(--bg);display:flex;flex-direction:column}
+.level-pill{display:inline-block;padding:5px 13px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:10px}
+.topics-list{padding:4px 20px;flex:1}
+.topic-card{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:17px 18px;margin-bottom:10px;cursor:pointer;transition:all 0.22s;position:relative}
+.topic-card:hover{background:var(--surface2);border-color:rgba(108,99,255,0.25);transform:translateX(4px)}
+.topic-card-arrow{color:var(--muted);font-size:20px;margin-left:auto;transition:all 0.2s}
+.topic-card:hover .topic-card-arrow{color:var(--text)}
+.topic-icon{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.topic-name{font-weight:700;font-size:15px;margin-bottom:2px}
+.topic-desc{color:var(--muted);font-size:12.5px}
+.stats-bar{margin:14px 20px 28px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:18px 20px;display:flex;justify-content:space-around}
 .stat{text-align:center}
-.stat-num{font-family:'Sora',sans-serif;font-size:22px;font-weight:800}
-.stat-label{font-size:11px;color:#A7A9BE;margin-top:2px}
-.xp-bar-wrap{margin:0 20px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:14px 20px}
-.xp-label{display:flex;justify-content:space-between;font-size:12px;color:#A7A9BE;margin-bottom:8px}
-.xp-bar{height:8px;background:rgba(255,255,255,0.1);border-radius:10px;overflow:hidden}
-.xp-fill{height:100%;background:linear-gradient(90deg,#4ECDC4,#A78BFA);border-radius:10px;transition:width 0.5s ease}
-.badges-row{display:flex;gap:8px;flex-wrap:wrap;margin:0 20px 16px}
-.badge{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600}
-.badge.earned{background:rgba(78,205,196,0.15);border-color:rgba(78,205,196,0.4);color:#4ECDC4}
-.chat-screen{min-height:100vh;background:#0F0E17;display:flex;flex-direction:column}
-.chat-header{padding:44px 20px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,0.06)}
-.back-btn{background:rgba(255,255,255,0.06);border:none;color:#FFFFFE;border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;flex-shrink:0}
-.chat-topic-name{font-family:'Sora',sans-serif;font-weight:700;font-size:15px}
-.chat-topic-sub{font-size:12px;color:#A7A9BE;margin-top:1px}
-.streak-badge{background:rgba(255,107,107,0.15);border:1px solid rgba(255,107,107,0.3);border-radius:10px;padding:4px 10px;font-size:13px;font-weight:700;color:#FF6B6B}
-.mode-toggle{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#FFFFFE;border-radius:10px;padding:4px 10px;font-size:13px;cursor:pointer;font-weight:600}
-.messages{flex:1;overflow-y:auto;padding:20px 16px;display:flex;flex-direction:column}
-.message-row{display:flex;flex-direction:column;margin-bottom:12px}
-.message-row.user{align-items:flex-end}
-.message-row.bot{align-items:flex-start}
-.bubble{max-width:78%;padding:12px 16px;border-radius:20px;font-size:14px;line-height:1.55}
-.bubble.user{background:#4ECDC4;color:#0F0E17;border-bottom-right-radius:6px;font-weight:500}
-.bubble.bot{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);color:#FFFFFE;border-bottom-left-radius:6px}
-.correction-box{max-width:90%;margin-top:6px;background:#1a1a2e;border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:12px 14px}
-.sentence-display{font-size:14px;line-height:1.8;margin-bottom:8px;flex-wrap:wrap;display:flex;gap:2px;align-items:baseline}
-.word-wrong{color:#FF6B6B;text-decoration:line-through;font-weight:600}
-.word-normal{color:#FFFFFE}
-.correction-item{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.stat-num{font-size:24px;font-weight:800;line-height:1}
+.stat-label{font-size:10.5px;color:var(--muted);margin-top:3px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase}
+
+/* CHAT */
+.chat-screen{min-height:100vh;background:var(--bg);display:flex;flex-direction:column}
+.chat-header{padding:46px 18px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border)}
+.chat-back{background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:12px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;flex-shrink:0;transition:all 0.2s}
+.chat-back:hover{background:var(--surface2)}
+.chat-topic-name{font-weight:700;font-size:15px;line-height:1.2}
+.chat-topic-sub{font-size:11.5px;color:var(--muted);margin-top:2px}
+.streak-pill{background:rgba(255,107,107,0.12);border:1px solid rgba(255,107,107,0.25);border-radius:10px;padding:5px 11px;font-size:13px;font-weight:700;color:var(--red);white-space:nowrap}
+.messages{flex:1;overflow-y:auto;padding:18px 16px;display:flex;flex-direction:column}
+.messages::-webkit-scrollbar{width:3px}
+.messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:10px}
+.msg-row{display:flex;flex-direction:column;margin-bottom:12px}
+.msg-row.user{align-items:flex-end}
+.msg-row.bot{align-items:flex-start}
+.bubble{max-width:80%;padding:12px 16px;border-radius:20px;font-size:14px;line-height:1.55;animation:pop 0.2s ease both}
+.bubble.user{background:linear-gradient(135deg,#6C63FF,#8B7FFF);color:#fff;border-bottom-right-radius:6px;font-weight:500}
+.bubble.bot{background:var(--surface);border:1px solid var(--border);color:var(--text);border-bottom-left-radius:6px}
+.perfect-tag{font-size:11px;color:var(--green);font-weight:700;margin-top:5px}
+.correction-box{max-width:92%;margin-top:7px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:13px 15px;animation:pop 0.2s ease both}
+.sentence-display{font-size:13.5px;line-height:1.85;margin-bottom:10px;flex-wrap:wrap;display:flex;gap:2px;align-items:baseline}
+.word-wrong{color:var(--red);text-decoration:line-through;font-weight:600}
+.word-normal{color:var(--text)}
+.corrected-full{font-size:12.5px;color:var(--green);font-weight:600;margin-bottom:10px;padding:8px 11px;background:rgba(0,212,170,0.08);border-radius:10px;border:1px solid rgba(0,212,170,0.18)}
+.correction-item{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border)}
 .correction-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
-.correction-wrong{color:#FF6B6B;font-size:13px;font-weight:600;text-decoration:line-through}
-.correction-arrow{color:#A7A9BE;font-size:13px;margin:0 6px}
-.correction-right{color:#4ECDC4;font-size:13px;font-weight:700}
-.correction-suggest{color:#FFB347;font-size:13px;font-weight:600}
-.correction-explain{font-size:12px;color:#A7A9BE;margin-top:4px;line-height:1.5}
-.type-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;margin-bottom:4px}
-.type-error{background:rgba(255,107,107,0.2);color:#FF6B6B}
-.type-suggest{background:rgba(255,179,71,0.2);color:#FFB347}
-.typing-indicator{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:20px;border-bottom-left-radius:6px;padding:12px 16px;font-size:13px;color:#A7A9BE;font-style:italic}
-.input-area{padding:12px 16px 24px;border-top:1px solid rgba(255,255,255,0.06);display:flex;gap:8px;align-items:flex-end}
-.message-input{flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:12px 16px;color:#FFFFFE;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;resize:none}
-.message-input::placeholder{color:#555770}
-.message-input:focus{border-color:rgba(78,205,196,0.4)}
-.send-btn{width:44px;height:44px;background:#4ECDC4;border:none;border-radius:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:18px;font-weight:700;color:#0F0E17}
-.send-btn:disabled{background:rgba(78,205,196,0.3);cursor:not-allowed}
-.mic-btn{background:rgba(255,255,255,0.1);color:#FFFFFE;transition:all 0.2s}
-.mic-btn.listening{background:#FF6B6B;animation:pulse 1s infinite}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
-.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#4ECDC4;color:#0F0E17;padding:10px 20px;border-radius:20px;font-weight:700;font-size:14px;z-index:999;animation:fadeInOut 2.5s ease forwards;white-space:nowrap}
-@keyframes fadeInOut{0%{opacity:0;top:30px}15%{opacity:1;top:20px}80%{opacity:1}100%{opacity:0}}
+.type-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;margin-bottom:5px}
+.type-error{background:rgba(255,107,107,0.15);color:var(--red)}
+.type-suggest{background:rgba(255,209,102,0.15);color:var(--yellow)}
+.c-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:4px}
+.c-wrong{color:var(--red);font-size:13px;font-weight:600;text-decoration:line-through}
+.c-arrow{color:var(--muted);font-size:12px}
+.c-right{color:var(--green);font-size:13px;font-weight:700}
+.c-suggest{color:var(--yellow);font-size:13px;font-weight:700}
+.c-explain{font-size:12px;color:var(--muted);line-height:1.5}
+.typing-dots{background:var(--surface);border:1px solid var(--border);border-radius:20px;border-bottom-left-radius:6px;padding:14px 18px;display:flex;gap:5px;align-items:center}
+.dot{width:7px;height:7px;background:var(--muted);border-radius:50%;animation:bounce 1.2s infinite}
+.dot:nth-child(2){animation-delay:0.18s}
+.dot:nth-child(3){animation-delay:0.36s}
+.input-area{padding:10px 14px 28px;border-top:1px solid var(--border);display:flex;gap:10px;align-items:flex-end}
+.msg-input{flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:12px 16px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;outline:none;resize:none;transition:border-color 0.2s}
+.msg-input::placeholder{color:var(--muted)}
+.msg-input:focus{border-color:rgba(108,99,255,0.5)}
+.send-btn{width:46px;height:46px;background:linear-gradient(135deg,#6C63FF,#8B7FFF);border:none;border-radius:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:20px;color:#fff;transition:all 0.2s}
+.send-btn:hover{transform:scale(1.07)}
+.send-btn:disabled{background:rgba(108,99,255,0.3);cursor:not-allowed;transform:none}
 </style>
 </head>
 <body>
 <div id="root"></div>
 <script type="text/babel">
 const{useState,useRef,useEffect}=React;
-
 const LEVELS=[
-{id:"easy",emoji:"🌱",label:"Easy",desc:"For beginners — gentle corrections only",color:"#4ECDC4",bg:"rgba(78,205,196,0.1)",border:"rgba(78,205,196,0.3)"},
-{id:"intermediate",emoji:"🔥",label:"Intermediate",desc:"Balanced — good for everyday learners",color:"#FFD93D",bg:"rgba(255,217,61,0.1)",border:"rgba(255,217,61,0.3)"},
-{id:"advanced",emoji:"⚡",label:"Advanced",desc:"Pro level — strict grammar & punctuation",color:"#FF6B6B",bg:"rgba(255,107,107,0.1)",border:"rgba(255,107,107,0.3)"},
+  {id:"easy",emoji:"🌱",label:"Easy",desc:"For beginners — gentle corrections",color:"#00D4AA",bg:"rgba(0,212,170,0.1)",border:"rgba(0,212,170,0.3)"},
+  {id:"intermediate",emoji:"🔥",label:"Intermediate",desc:"Balanced — for everyday learners",color:"#FFD166",bg:"rgba(255,209,102,0.1)",border:"rgba(255,209,102,0.3)"},
+  {id:"advanced",emoji:"⚡",label:"Advanced",desc:"Pro level — strict grammar rules",color:"#FF6B6B",bg:"rgba(255,107,107,0.1)",border:"rgba(255,107,107,0.3)"},
 ];
-
 const TOPICS=[
-{id:"random",emoji:"💬",label:"Random Chat",description:"Casual everyday conversation",color:"#4ECDC4"},
-{id:"job",emoji:"💼",label:"Job Interview",description:"Practice professional English",color:"#FF6B6B"},
-{id:"restaurant",emoji:"🍽️",label:"At a Restaurant",description:"Order food, talk to staff",color:"#FFD93D"},
-{id:"student",emoji:"🎓",label:"Student Life",description:"School & college conversations",color:"#A78BFA"},
-{id:"travel",emoji:"✈️",label:"Travel",description:"Airports, hotels & directions",color:"#4ECDC4"},
-{id:"shopping",emoji:"🛍️",label:"Shopping",description:"Buy clothes, bargain & more",color:"#FF6B6B"},
-{id:"doctor",emoji:"🏥",label:"Doctor Visit",description:"Explain symptoms, ask questions",color:"#45B7D1"},
-{id:"phone",emoji:"📞",label:"Phone Call",description:"Talk formally on the phone",color:"#FFD93D"},
+  {id:"random",emoji:"💬",label:"Random Chat",description:"Casual everyday conversation",color:"#6C63FF"},
+  {id:"job",emoji:"💼",label:"Job Interview",description:"Practice professional English",color:"#FF6B6B"},
+  {id:"restaurant",emoji:"🍽️",label:"At a Restaurant",description:"Order food, talk to staff",color:"#FFD166"},
+  {id:"student",emoji:"🎓",label:"Student Life",description:"School & college conversations",color:"#A78BFA"},
 ];
-
-const BADGE_LIST=[
-{id:"first",emoji:"🌟",label:"First Message"},
-{id:"perfect5",emoji:"✅",label:"5 Perfect Sentences"},
-{id:"streak3",emoji:"🔥",label:"3 Streak"},
-{id:"streak7",emoji:"🏆",label:"7 Streak"},
-{id:"xp100",emoji:"💎",label:"100 XP"},
-];
-
-const getSys=(topic,level,topicId,learningMode)=>{
-const informal=topicId==="random"?"Reply in a casual, friendly, informal way like a real friend texting.":"Reply in a natural, context-appropriate way.";
-const correctionNote=learningMode?"":"Do NOT provide any corrections array. Just chat naturally.";
-const rules={
-easy:`You are a kind English conversation partner for BEGINNERS. Scenario: ${topic}. ${informal} ${correctionNote}
+const getSys=(topic,level,topicId)=>{
+  const informal=topicId==="random"?"Reply in a casual, friendly, informal way like a real friend texting.":"Reply in a natural, context-appropriate way.";
+  const rules={
+    easy:`You are a kind English conversation partner for BEGINNERS. Scenario: ${topic}. ${informal}
 Reply ONLY with raw JSON. No text outside JSON.
-Format: {"reply":"your response — always end with a follow-up question","corrections":[{"wrong":"ONLY the incorrect word or phrase","correct":"corrected version","explanation":"simple friendly explanation","type":"error"}],"isCorrect":true/false}
-RULES: Max 1 correction. Only major errors. If correct, return [] and isCorrect:true`,
-intermediate:`You are a helpful English conversation partner for INTERMEDIATE learners. Scenario: ${topic}. ${informal} ${correctionNote}
+Format: {"reply":"your response","corrections":[{"wrong":"ONLY the incorrect word or phrase","correct":"corrected version","explanation":"simple friendly explanation","type":"error"}],"isCorrect":true}
+EASY RULES: Only correct major errors. Max 1 correction. If correct return [].`,
+    intermediate:`You are a helpful English conversation partner for INTERMEDIATE learners. Scenario: ${topic}. ${informal}
 Reply ONLY with raw JSON. No text outside JSON.
-Format: {"reply":"your response — always end with a follow-up question","corrections":[{"wrong":"ONLY the incorrect word or phrase","correct":"corrected version","explanation":"clear explanation","type":"error or suggestion"}],"isCorrect":true/false}
-RULES: Max 2 corrections. Correct real grammar mistakes only.`,
-advanced:`You are a strict English conversation partner for ADVANCED learners. Scenario: ${topic}. ${informal} ${correctionNote}
+Format: {"reply":"your response","corrections":[{"wrong":"ONLY the incorrect word or phrase","correct":"corrected version","explanation":"clear explanation","type":"error or suggestion"}],"isCorrect":true}
+INTERMEDIATE RULES: Correct real grammar mistakes only. Max 2 corrections.`,
+    advanced:`You are a strict English conversation partner for ADVANCED learners. Scenario: ${topic}. ${informal}
 Reply ONLY with raw JSON. No text outside JSON.
-Format: {"reply":"your response — always end with a follow-up question","corrections":[{"wrong":"ONLY the incorrect word or phrase","correct":"corrected version","explanation":"detailed explanation","type":"error or suggestion"}],"isCorrect":true/false}
-RULES: Correct ALL mistakes strictly. Grammar, tense, punctuation, articles.`
+Format: {"reply":"your response","corrections":[{"wrong":"ONLY the incorrect word or phrase","correct":"corrected version","explanation":"detailed explanation","type":"error or suggestion"}],"isCorrect":true}
+ADVANCED RULES: Correct ALL mistakes strictly. Grammar, tense, punctuation, articles, spelling.`
+  };
+  return rules[level];
 };
-return rules[level];
-};
-
 const highlightSentence=(sentence,corrections)=>{
-if(!corrections||corrections.length===0)return null;
-let result=sentence;
-corrections.forEach(c=>{result=result.replace(c.wrong,`%%WRONG%%${c.wrong}%%ENDWRONG%%`)});
-const parts=result.split(/(%%WRONG%%.*?%%ENDWRONG%%)/g);
-return parts.map((part,i)=>{
-if(part.startsWith("%%WRONG%%")){
-const word=part.replace("%%WRONG%%","").replace("%%ENDWRONG%%","");
-return React.createElement("span",{key:i,className:"word-wrong"},word);
-}
-return React.createElement("span",{key:i,className:"word-normal"},part);
-});
+  if(!corrections||corrections.length===0)return null;
+  let result=sentence;
+  corrections.forEach(c=>{result=result.replace(c.wrong,`%%W%%${c.wrong}%%EW%%`)});
+  const parts=result.split(/(%%W%%.*?%%EW%%)/g);
+  return parts.map((part,i)=>{
+    if(part.startsWith("%%W%%")){
+      const word=part.replace("%%W%%","").replace("%%EW%%","");
+      return React.createElement("span",{key:i,className:"word-wrong"},word);
+    }
+    return React.createElement("span",{key:i,className:"word-normal"},part);
+  });
 };
-
-const buildCorrectSentence=(original,corrections)=>{
-let result=original;
-corrections?.forEach(c=>{result=result.replace(c.wrong,c.correct)});
-return result;
+const buildCorrected=(original,corrections)=>{
+  if(!corrections||corrections.length===0)return null;
+  let result=original;
+  corrections.forEach(c=>{result=result.replace(c.wrong,c.correct)});
+  return result===original?null:result;
 };
-
 const call=async(h,sys)=>{
-const r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:h,system:sys})});
-const d=await r.json();
-return d.content;
+  const r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:h,system:sys})});
+  const d=await r.json();
+  return d.content;
 };
-
 const parse=(t)=>{try{return JSON.parse(t.replace(/```json|```/g,"").trim())}catch{return{reply:t,corrections:[],isCorrect:true}}};
 
-const loadSaved=()=>{
-try{const s=localStorage.getItem("speakright_v2");return s?JSON.parse(s):{correct:0,mistakes:0,streak:0,xp:0,badges:[]};}
-catch{return{correct:0,mistakes:0,streak:0,xp:0,badges:[]};}
-};
-
 function App(){
-const[screen,setScreen]=useState("welcome");
-const[level,setLevel]=useState(null);
-const[topic,setTopic]=useState(null);
-const[msgs,setMsgs]=useState([]);
-const[input,setInput]=useState("");
-const[loading,setLoading]=useState(false);
-const[hist,setHist]=useState([]);
-const[stats,setStats]=useState(loadSaved);
-const[listening,setListening]=useState(false);
-const[learningMode,setLearningMode]=useState(true);
-const[toast,setToast]=useState(null);
-const endRef=useRef(null);
-const inputRef=useRef(null);
-const recognitionRef=useRef(null);
+  const[screen,setScreen]=useState("welcome");
+  const[level,setLevel]=useState(null);
+  const[topic,setTopic]=useState(null);
+  const[msgs,setMsgs]=useState([]);
+  const[input,setInput]=useState("");
+  const[loading,setLoading]=useState(false);
+  const[hist,setHist]=useState([]);
+  const[stats,setStats]=useState({correct:0,mistakes:0,streak:0});
+  const endRef=useRef(null);
+  useEffect(()=>{endRef.current?.scrollIntoView({behavior:"smooth"})},[msgs,loading]);
+  const selectLevel=(lv)=>{setLevel(lv);setScreen("topic")};
+  const startTopic=async(tp)=>{
+    setTopic(tp);setMsgs([]);setHist([]);setScreen("chat");setLoading(true);
+    const h=[{role:"user",content:"Start the conversation with a natural opening line."}];
+    const text=await call(h,getSys(tp.label,level.id,tp.id));
+    const p=parse(text);
+    setMsgs([{role:"bot",content:p.reply}]);
+    setHist([...h,{role:"assistant",content:text}]);
+    setLoading(false);
+  };
+  const send=async()=>{
+    if(!input.trim()||loading)return;
+    const m=input.trim();setInput("");setLoading(true);
+    const entry={role:"user",content:m,corrections:null,isCorrect:null,correctedSentence:null};
+    setMsgs(prev=>[...prev,entry]);
+    const nh=[...hist,{role:"user",content:m}];
+    const text=await call(nh,getSys(topic.label,level.id,topic.id));
+    const p=parse(text);
+    const correctedSentence=buildCorrected(m,p.corrections);
+    setStats(prev=>({correct:p.isCorrect?prev.correct+1:prev.correct,mistakes:prev.mistakes+(p.corrections?.length||0),streak:p.isCorrect?prev.streak+1:0}));
+    setMsgs(prev=>{const u=[...prev];u[u.length-1]={...entry,corrections:p.corrections||[],isCorrect:p.isCorrect,correctedSentence};return[...u,{role:"bot",content:p.reply}]});
+    setHist([...nh,{role:"assistant",content:text}]);
+    setLoading(false);
+  };
 
-useEffect(()=>{endRef.current?.scrollIntoView({behavior:"smooth"})},[msgs,loading]);
-useEffect(()=>{localStorage.setItem("speakright_v2",JSON.stringify(stats));},[stats]);
+  if(screen==="welcome")return(
+    <div className="app"><div className="welcome">
+      <div className="glow1"/><div className="glow2"/>
+      <div className="welcome-inner">
+        <div className="a1"><div className="logo-badge">🗣️</div></div>
+        <div className="a1"><div className="tag-pill">✦ AI English Coach</div></div>
+        <h1 className="a2">Speak English<br/><em>Fluently with AI</em></h1>
+        <p className="welcome-sub a3">Chat naturally. Get instant grammar corrections. Improve every day — completely free.</p>
+        <div className="feat-grid a4">
+          <div className="feat-card"><div className="feat-icon">✍️</div><div className="feat-name">Grammar Fix</div><div className="feat-text">Instant corrections as you type</div></div>
+          <div className="feat-card"><div className="feat-icon">📘</div><div className="feat-name">Explanations</div><div className="feat-text">Learn why each mistake happened</div></div>
+          <div className="feat-card"><div className="feat-icon">🔥</div><div className="feat-name">Streaks</div><div className="feat-text">Daily streaks keep you going</div></div>
+          <div className="feat-card"><div className="feat-icon">🎭</div><div className="feat-name">Scenarios</div><div className="feat-text">Real life situations to practice</div></div>
+        </div>
+        <p className="made-by a5">✦ Made with ❤️ by <b>Arshad</b> ✦</p>
+        <button className="start-btn a6" onClick={()=>setScreen("level")}>Start Speaking Now →</button>
+      </div>
+    </div></div>
+  );
 
-const showToast=(msg)=>{setToast(msg);setTimeout(()=>setToast(null),2500);};
+  if(screen==="level")return(
+    <div className="app"><div className="level-screen">
+      <div className="top-header">
+        <button className="back-btn" onClick={()=>setScreen("welcome")}>‹</button>
+        <h2 className="a1">Choose Level</h2>
+        <p className="a1">Pick what matches your English</p>
+      </div>
+      <div className="levels-list">
+        {LEVELS.map((lv,i)=>(
+          <div className={`level-card a${i+2}`} key={lv.id} onClick={()=>selectLevel(lv)} style={{background:lv.bg,borderColor:lv.border}}>
+            <div className="level-icon" style={{background:lv.color+"28"}}>{lv.emoji}</div>
+            <div style={{flex:1}}>
+              <div className="level-name" style={{color:lv.color}}>{lv.label}</div>
+              <div className="level-desc">{lv.desc}</div>
+            </div>
+            <div className="level-card-arrow">›</div>
+          </div>
+        ))}
+      </div>
+    </div></div>
+  );
 
-const checkBadges=(ns)=>{
-const e=[...ns.badges];
-if(!e.includes("first")&&ns.correct>=1){e.push("first");showToast("🌟 Badge: First Message!");}
-if(!e.includes("perfect5")&&ns.correct>=5){e.push("perfect5");showToast("✅ Badge: 5 Perfect Sentences!");}
-if(!e.includes("streak3")&&ns.streak>=3){e.push("streak3");showToast("🔥 Badge: 3 Streak!");}
-if(!e.includes("streak7")&&ns.streak>=7){e.push("streak7");showToast("🏆 Badge: 7 Streak!");}
-if(!e.includes("xp100")&&ns.xp>=100){e.push("xp100");showToast("💎 Badge: 100 XP!");}
-return e;
-};
+  if(screen==="topic")return(
+    <div className="app"><div className="topic-screen">
+      <div className="top-header">
+        <button className="back-btn" onClick={()=>setScreen("level")}>‹</button>
+        <div className="level-pill a1" style={{background:level.bg,color:level.color,border:`1px solid ${level.border}`}}>{level.emoji} {level.label} Level</div>
+        <h2 className="a1">Pick a Scenario</h2>
+        <p className="a1">Choose a situation to practice</p>
+      </div>
+      <div className="topics-list">
+        {TOPICS.map((tp,i)=>(
+          <div className={`topic-card a${i+2}`} key={tp.id} onClick={()=>startTopic(tp)}>
+            <div className="topic-icon" style={{background:tp.color+"22"}}>{tp.emoji}</div>
+            <div style={{flex:1}}>
+              <div className="topic-name">{tp.label}</div>
+              <div className="topic-desc">{tp.description}</div>
+            </div>
+            <div className="topic-card-arrow">›</div>
+          </div>
+        ))}
+      </div>
+      <div className="stats-bar a6">
+        <div className="stat"><div className="stat-num" style={{color:"var(--green)"}}>{stats.correct}</div><div className="stat-label">Correct</div></div>
+        <div className="stat"><div className="stat-num" style={{color:"var(--red)"}}>{stats.mistakes}</div><div className="stat-label">Fixed</div></div>
+        <div className="stat"><div className="stat-num" style={{color:"var(--yellow)"}}>🔥{stats.streak}</div><div className="stat-label">Streak</div></div>
+      </div>
+    </div></div>
+  );
 
-const startListen=()=>{
-const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-if(!SR){alert("Voice input needs Chrome browser!");return;}
-const r=new SR();
-r.lang="en-US";r.continuous=false;r.interimResults=false;
-r.onstart=()=>setListening(true);
-r.onend=()=>setListening(false);
-r.onresult=(e)=>setInput(e.results[0][0].transcript);
-r.onerror=()=>setListening(false);
-recognitionRef.current=r;r.start();
-};
-
-const stopListen=()=>{recognitionRef.current?.stop();setListening(false);};
-
-const selectLevel=(lv)=>{setLevel(lv);setScreen("topic");};
-
-const startTopic=async(tp)=>{
-setTopic(tp);setMsgs([]);setHist([]);setScreen("chat");setLoading(true);
-const h=[{role:"user",content:"Start the conversation with a friendly opening line and a question."}];
-const text=await call(h,getSys(tp.label,level.id,tp.id,learningMode));
-const p=parse(text);
-setMsgs([{role:"bot",content:p.reply}]);
-setHist([...h,{role:"assistant",content:text}]);
-setLoading(false);
-setTimeout(()=>inputRef.current?.focus(),100);
-};
-
-const send=async()=>{
-if(!input.trim()||loading)return;
-const m=input.trim();setInput("");setLoading(true);
-const entry={role:"user",content:m,corrections:null,isCorrect:null};
-setMsgs(prev=>[...prev,entry]);
-const nh=[...hist,{role:"user",content:m}];
-const text=await call(nh,getSys(topic.label,level.id,topic.id,learningMode));
-const p=parse(text);
-const xpGain=p.isCorrect?10:3;
-setStats(prev=>{
-const ns={correct:p.isCorrect?prev.correct+1:prev.correct,mistakes:prev.mistakes+(p.corrections?.length||0),streak:p.isCorrect?prev.streak+1:0,xp:prev.xp+xpGain,badges:prev.badges};
-ns.badges=checkBadges(ns);
-return ns;
-});
-const correctedSentence=buildCorrectSentence(m,p.corrections);
-setMsgs(prev=>{const u=[...prev];u[u.length-1]={...entry,corrections:p.corrections||[],isCorrect:p.isCorrect,correctedSentence};return[...u,{role:"bot",content:p.reply}]});
-setHist([...nh,{role:"assistant",content:text}]);
-setLoading(false);
-setTimeout(()=>inputRef.current?.focus(),100);
-};
-
-const xpLevel=Math.floor(stats.xp/100)+1;
-const xpProgress=stats.xp%100;
-
-if(screen==="welcome")return(
-<div className="app"><div className="welcome">
-{toast&&<div className="toast">{toast}</div>}
-<div className="welcome-logo">🗣️</div>
-<h1>Speak<span>Right</span></h1>
-<p className="welcome-sub">Chat in English. Make mistakes. Learn instantly.</p>
-<div className="features-grid">
-<div className="feature-card"><div className="icon">✍️</div><div className="text">Grammar Correction</div></div>
-<div className="feature-card"><div className="icon">🎤</div><div className="text">Voice Input</div></div>
-<div className="feature-card"><div className="icon">🏆</div><div className="text">XP & Badges</div></div>
-<div className="feature-card"><div className="icon">💾</div><div className="text">Progress Saved</div></div>
-</div>
-<p className="made-by">✦ Made by Arshad ✦</p>
-<button className="start-btn" onClick={()=>setScreen("level")}>Start Practicing →</button>
-</div></div>
-);
-
-if(screen==="level")return(
-<div className="app"><div className="level-screen">
-{toast&&<div className="toast">{toast}</div>}
-<div className="level-header"><h2>Choose Your Level</h2><p>Pick the level that matches your English</p></div>
-<div className="levels-list">
-{LEVELS.map(lv=>(
-<div className="level-card" key={lv.id} onClick={()=>selectLevel(lv)} style={{background:lv.bg,border:`2px solid ${lv.border}`}}>
-<div className="level-icon" style={{background:lv.color+"33"}}>{lv.emoji}</div>
-<div style={{flex:1}}><div className="level-name" style={{color:lv.color}}>{lv.label}</div><div className="level-desc">{lv.desc}</div></div>
-<div style={{color:"#A7A9BE",fontSize:20}}>›</div>
-</div>
-))}
-</div>
-</div></div>
-);
-
-if(screen==="topic")return(
-<div className="app"><div className="topic-screen">
-{toast&&<div className="toast">{toast}</div>}
-<div className="topic-header">
-<div className="level-badge" style={{background:level.bg,color:level.color,border:`1px solid ${level.border}`}}>{level.emoji} {level.label} Level</div>
-<h2>Choose a Scenario</h2><p>Pick a situation to practice</p>
-</div>
-<div className="xp-bar-wrap">
-<div className="xp-label"><span>⭐ Level {xpLevel}</span><span>{stats.xp} XP total</span></div>
-<div className="xp-bar"><div className="xp-fill" style={{width:`${xpProgress}%`}}/></div>
-</div>
-{stats.badges.length>0&&(
-<div className="badges-row">
-{BADGE_LIST.filter(b=>stats.badges.includes(b.id)).map(b=>(
-<div key={b.id} className="badge earned">{b.emoji} {b.label}</div>
-))}
-</div>
-)}
-<div className="topics-list">
-{TOPICS.map(tp=>(
-<div className="topic-card" key={tp.id} onClick={()=>startTopic(tp)}>
-<div className="topic-icon" style={{background:tp.color+"22"}}>{tp.emoji}</div>
-<div style={{flex:1}}><div className="topic-name">{tp.label}</div><div className="topic-desc">{tp.description}</div></div>
-<div style={{color:"#A7A9BE",fontSize:18}}>›</div>
-</div>
-))}
-</div>
-<div className="stats-bar">
-<div className="stat"><div className="stat-num" style={{color:"#4ECDC4"}}>{stats.correct}</div><div className="stat-label">CORRECT</div></div>
-<div className="stat"><div className="stat-num" style={{color:"#FF6B6B"}}>{stats.mistakes}</div><div className="stat-label">FIXED</div></div>
-<div className="stat"><div className="stat-num" style={{color:"#FFD93D"}}>🔥{stats.streak}</div><div className="stat-label">STREAK</div></div>
-</div>
-</div></div>
-);
-
-return(
-<div className="app"><div className="chat-screen">
-{toast&&<div className="toast">{toast}</div>}
-<div className="chat-header">
-<button className="back-btn" onClick={()=>setScreen("topic")}>‹</button>
-<div style={{flex:1}}><div className="chat-topic-name">{topic?.emoji} {topic?.label}</div><div className="chat-topic-sub">{level?.emoji} {level?.label} • {learningMode?"📘 Learning":"🟢 Practice"}</div></div>
-<button className="mode-toggle" onClick={()=>setLearningMode(m=>!m)} title="Toggle mode">{learningMode?"📘":"🟢"}</button>
-<div className="streak-badge">🔥{stats.streak}</div>
-</div>
-<div className="messages">
-{msgs.map((msg,i)=>(
-<div key={i} className={`message-row ${msg.role}`}>
-<div className={`bubble ${msg.role}`}>{msg.content}</div>
-{msg.role==="user"&&msg.isCorrect===true&&msg.corrections!==null&&(
-<div style={{fontSize:11,color:"#4ECDC4",fontWeight:600,marginTop:5}}>✅ Perfect! +10 XP</div>
-)}
-{msg.role==="user"&&msg.corrections&&msg.corrections.length>0&&(
-<div className="correction-box">
-{msg.correctedSentence&&<div style={{color:"#4ECDC4",fontWeight:600,marginBottom:8}}>✅ {msg.correctedSentence}</div>}
-<div className="sentence-display">{highlightSentence(msg.content,msg.corrections)||msg.content}</div>
-{msg.corrections.map((c,j)=>(
-<div key={j} className="correction-item">
-<div className={`type-badge ${c.type==="suggestion"?"type-suggest":"type-error"}`}>{c.type==="suggestion"?"💡 Suggestion":"❌ Error"}</div>
-<div><span className="correction-wrong">{c.wrong}</span><span className="correction-arrow">→</span><span className={c.type==="suggestion"?"correction-suggest":"correction-right"}>{c.correct}</span></div>
-<div className="correction-explain">📘 {c.explanation}</div>
-</div>
-))}
-</div>
-)}
-</div>
-))}
-{loading&&<div className="message-row bot"><div className="typing-indicator">SpeakRight is typing...</div></div>}
-<div ref={endRef}/>
-</div>
-<div className="input-area">
-<textarea ref={inputRef} className="message-input" value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send()}}} placeholder="Type or speak in English..." rows={1}/>
-<button className={`send-btn mic-btn ${listening?"listening":""}`} onClick={listening?stopListen:startListen}>🎤</button>
-<button className="send-btn" onClick={send} disabled={loading||!input.trim()}>↑</button>
-</div>
-</div></div>
-);
+  return(
+    <div className="app"><div className="chat-screen">
+      <div className="chat-header">
+        <button className="chat-back" onClick={()=>setScreen("topic")}>‹</button>
+        <div style={{flex:1}}>
+          <div className="chat-topic-name">{topic?.emoji} {topic?.label}</div>
+          <div className="chat-topic-sub">{level?.emoji} {level?.label} · Corrections ON</div>
+        </div>
+        <div className="streak-pill">🔥 {stats.streak}</div>
+      </div>
+      <div className="messages">
+        {msgs.map((msg,i)=>(
+          <div key={i} className={`msg-row ${msg.role}`}>
+            <div className={`bubble ${msg.role}`}>{msg.content}</div>
+            {msg.role==="user"&&msg.isCorrect===true&&msg.corrections!==null&&(
+              <div className="perfect-tag">✅ Perfect sentence!</div>
+            )}
+            {msg.role==="user"&&msg.corrections&&msg.corrections.length>0&&(
+              <div className="correction-box">
+                <div className="sentence-display">
+                  {highlightSentence(msg.content,msg.corrections)||msg.content}
+                </div>
+                {msg.correctedSentence&&(
+                  <div className="corrected-full">✅ {msg.correctedSentence}</div>
+                )}
+                {msg.corrections.map((c,j)=>(
+                  <div key={j} className="correction-item">
+                    <div className={`type-badge ${c.type==="suggestion"?"type-suggest":"type-error"}`}>
+                      {c.type==="suggestion"?"💡 Suggestion":"❌ Error"}
+                    </div>
+                    <div className="c-row">
+                      <span className="c-wrong">{c.wrong}</span>
+                      <span className="c-arrow">→</span>
+                      <span className={c.type==="suggestion"?"c-suggest":"c-right"}>{c.correct}</span>
+                    </div>
+                    <div className="c-explain">📘 {c.explanation}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+        {loading&&<div className="msg-row bot"><div className="typing-dots"><div className="dot"/><div className="dot"/><div className="dot"/></div></div>}
+        <div ref={endRef}/>
+      </div>
+      <div className="input-area">
+        <textarea className="msg-input" value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send()}}} placeholder="Type your reply in English..." rows={1}/>
+        <button className="send-btn" onClick={send} disabled={loading||!input.trim()}>↑</button>
+      </div>
+    </div></div>
+  );
 }
 ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
