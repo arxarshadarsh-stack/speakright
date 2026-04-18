@@ -51,12 +51,20 @@ body{font-family:'DM Sans',sans-serif;background:#0F0E17;color:#FFFFFE;min-heigh
 .stat{text-align:center}
 .stat-num{font-family:'Sora',sans-serif;font-size:22px;font-weight:800}
 .stat-label{font-size:11px;color:#A7A9BE;margin-top:2px}
+.xp-bar-wrap{margin:0 20px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:14px 20px}
+.xp-label{display:flex;justify-content:space-between;font-size:12px;color:#A7A9BE;margin-bottom:8px}
+.xp-bar{height:8px;background:rgba(255,255,255,0.1);border-radius:10px;overflow:hidden}
+.xp-fill{height:100%;background:linear-gradient(90deg,#4ECDC4,#A78BFA);border-radius:10px;transition:width 0.5s ease}
+.badges-row{display:flex;gap:8px;flex-wrap:wrap;margin:0 20px 16px}
+.badge{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600}
+.badge.earned{background:rgba(78,205,196,0.15);border-color:rgba(78,205,196,0.4);color:#4ECDC4}
 .chat-screen{min-height:100vh;background:#0F0E17;display:flex;flex-direction:column}
-.chat-header{padding:44px 20px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.chat-header{padding:44px 20px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,0.06)}
 .back-btn{background:rgba(255,255,255,0.06);border:none;color:#FFFFFE;border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;flex-shrink:0}
 .chat-topic-name{font-family:'Sora',sans-serif;font-weight:700;font-size:15px}
 .chat-topic-sub{font-size:12px;color:#A7A9BE;margin-top:1px}
 .streak-badge{background:rgba(255,107,107,0.15);border:1px solid rgba(255,107,107,0.3);border-radius:10px;padding:4px 10px;font-size:13px;font-weight:700;color:#FF6B6B}
+.mode-toggle{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#FFFFFE;border-radius:10px;padding:4px 10px;font-size:13px;cursor:pointer;font-weight:600}
 .messages{flex:1;overflow-y:auto;padding:20px 16px;display:flex;flex-direction:column}
 .message-row{display:flex;flex-direction:column;margin-bottom:12px}
 .message-row.user{align-items:flex-end}
@@ -64,10 +72,8 @@ body{font-family:'DM Sans',sans-serif;background:#0F0E17;color:#FFFFFE;min-heigh
 .bubble{max-width:78%;padding:12px 16px;border-radius:20px;font-size:14px;line-height:1.55}
 .bubble.user{background:#4ECDC4;color:#0F0E17;border-bottom-right-radius:6px;font-weight:500}
 .bubble.bot{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);color:#FFFFFE;border-bottom-left-radius:6px}
-.correct-tag{font-size:11px;color:#4ECDC4;font-weight:600;margin-top:5px}
 .correction-box{max-width:90%;margin-top:6px;background:#1a1a2e;border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:12px 14px}
 .sentence-display{font-size:14px;line-height:1.8;margin-bottom:8px;flex-wrap:wrap;display:flex;gap:2px;align-items:baseline}
-.word-correct{color:#4ECDC4;font-weight:600}
 .word-wrong{color:#FF6B6B;text-decoration:line-through;font-weight:600}
 .word-normal{color:#FFFFFE}
 .correction-item{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06)}
@@ -80,11 +86,7 @@ body{font-family:'DM Sans',sans-serif;background:#0F0E17;color:#FFFFFE;min-heigh
 .type-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;margin-bottom:4px}
 .type-error{background:rgba(255,107,107,0.2);color:#FF6B6B}
 .type-suggest{background:rgba(255,179,71,0.2);color:#FFB347}
-.typing-dots{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:20px;border-bottom-left-radius:6px;padding:14px 18px;display:flex;gap:5px;align-items:center}
-.dot{width:7px;height:7px;background:#A7A9BE;border-radius:50%;animation:bounce 1.2s infinite}
-.dot:nth-child(2){animation-delay:0.2s}
-.dot:nth-child(3){animation-delay:0.4s}
-@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+.typing-indicator{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:20px;border-bottom-left-radius:6px;padding:12px 16px;font-size:13px;color:#A7A9BE;font-style:italic}
 .input-area{padding:12px 16px 24px;border-top:1px solid rgba(255,255,255,0.06);display:flex;gap:8px;align-items:flex-end}
 .message-input{flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:12px 16px;color:#FFFFFE;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;resize:none}
 .message-input::placeholder{color:#555770}
@@ -94,17 +96,21 @@ body{font-family:'DM Sans',sans-serif;background:#0F0E17;color:#FFFFFE;min-heigh
 .mic-btn{background:rgba(255,255,255,0.1);color:#FFFFFE;transition:all 0.2s}
 .mic-btn.listening{background:#FF6B6B;animation:pulse 1s infinite}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#4ECDC4;color:#0F0E17;padding:10px 20px;border-radius:20px;font-weight:700;font-size:14px;z-index:999;animation:fadeInOut 2.5s ease forwards;white-space:nowrap}
+@keyframes fadeInOut{0%{opacity:0;top:30px}15%{opacity:1;top:20px}80%{opacity:1}100%{opacity:0}}
 </style>
 </head>
 <body>
 <div id="root"></div>
 <script type="text/babel">
 const{useState,useRef,useEffect}=React;
+
 const LEVELS=[
 {id:"easy",emoji:"🌱",label:"Easy",desc:"For beginners — gentle corrections only",color:"#4ECDC4",bg:"rgba(78,205,196,0.1)",border:"rgba(78,205,196,0.3)"},
 {id:"intermediate",emoji:"🔥",label:"Intermediate",desc:"Balanced — good for everyday learners",color:"#FFD93D",bg:"rgba(255,217,61,0.1)",border:"rgba(255,217,61,0.3)"},
 {id:"advanced",emoji:"⚡",label:"Advanced",desc:"Pro level — strict grammar & punctuation",color:"#FF6B6B",bg:"rgba(255,107,107,0.1)",border:"rgba(255,107,107,0.3)"},
 ];
+
 const TOPICS=[
 {id:"random",emoji:"💬",label:"Random Chat",description:"Casual everyday conversation",color:"#4ECDC4"},
 {id:"job",emoji:"💼",label:"Job Interview",description:"Practice professional English",color:"#FF6B6B"},
@@ -115,44 +121,35 @@ const TOPICS=[
 {id:"doctor",emoji:"🏥",label:"Doctor Visit",description:"Explain symptoms, ask questions",color:"#45B7D1"},
 {id:"phone",emoji:"📞",label:"Phone Call",description:"Talk formally on the phone",color:"#FFD93D"},
 ];
-const getSys=(topic,level,topicId)=>{
-const informal=topicId==="random"?"Reply in a casual, friendly, informal way like a real friend texting. Use natural conversational language.":"Reply in a natural, context-appropriate way.";
+
+const BADGE_LIST=[
+{id:"first",emoji:"🌟",label:"First Message"},
+{id:"perfect5",emoji:"✅",label:"5 Perfect Sentences"},
+{id:"streak3",emoji:"🔥",label:"3 Streak"},
+{id:"streak7",emoji:"🏆",label:"7 Streak"},
+{id:"xp100",emoji:"💎",label:"100 XP"},
+];
+
+const getSys=(topic,level,topicId,learningMode)=>{
+const informal=topicId==="random"?"Reply in a casual, friendly, informal way like a real friend texting.":"Reply in a natural, context-appropriate way.";
+const correctionNote=learningMode?"":"Do NOT provide any corrections array. Just chat naturally.";
 const rules={
-easy:`You are a kind English conversation partner for BEGINNERS. Scenario: ${topic}. ${informal}
+easy:`You are a kind English conversation partner for BEGINNERS. Scenario: ${topic}. ${informal} ${correctionNote}
 Reply ONLY with raw JSON. No text outside JSON.
-Format: {"reply":"your response","corrections":[{"wrong":"ONLY the incorrect word or phrase — never the whole sentence","correct":"corrected version","explanation":"simple friendly explanation","type":"error"}],"isCorrect":true/false}
-EASY RULES:
-- ONLY correct major errors: wrong tense, missing key words, very wrong grammar
-- "Nothing happened" is CORRECT. "It is good" alone is CORRECT. Do not change correct sentences.
-- NEVER correct word choice if meaning is clear
-- NEVER suggest synonyms as corrections
-- Only mark the WRONG WORD OR PHRASE — never the whole sentence
-- Max 1 correction per message
-- If sentence is correct, return empty array [] and isCorrect:true`,
-intermediate:`You are a helpful English conversation partner for INTERMEDIATE learners. Scenario: ${topic}. ${informal}
+Format: {"reply":"your response — always end with a follow-up question","corrections":[{"wrong":"ONLY the incorrect word or phrase","correct":"corrected version","explanation":"simple friendly explanation","type":"error"}],"isCorrect":true/false}
+RULES: Max 1 correction. Only major errors. If correct, return [] and isCorrect:true`,
+intermediate:`You are a helpful English conversation partner for INTERMEDIATE learners. Scenario: ${topic}. ${informal} ${correctionNote}
 Reply ONLY with raw JSON. No text outside JSON.
-Format: {"reply":"your response","corrections":[{"wrong":"ONLY the incorrect word or phrase","correct":"corrected version","explanation":"clear explanation","type":"error or suggestion"}],"isCorrect":true/false}
-INTERMEDIATE RULES:
-- Correct real grammar mistakes only: tense errors, subject-verb agreement, wrong articles, missing words
-- "Nothing happened" is CORRECT. Do not change it.
-- Only use type "suggestion" for style improvements — never mark suggestions as errors
-- NEVER correct informal words in casual chat
-- Only mark the WRONG PART — not the whole sentence
-- Max 2 corrections per message
-- Punctuation: only correct if missing completely`,
-advanced:`You are a strict English conversation partner for ADVANCED learners. Scenario: ${topic}. ${informal}
+Format: {"reply":"your response — always end with a follow-up question","corrections":[{"wrong":"ONLY the incorrect word or phrase","correct":"corrected version","explanation":"clear explanation","type":"error or suggestion"}],"isCorrect":true/false}
+RULES: Max 2 corrections. Correct real grammar mistakes only.`,
+advanced:`You are a strict English conversation partner for ADVANCED learners. Scenario: ${topic}. ${informal} ${correctionNote}
 Reply ONLY with raw JSON. No text outside JSON.
-Format: {"reply":"your response","corrections":[{"wrong":"ONLY the incorrect word or phrase","correct":"corrected version","explanation":"detailed explanation","type":"error or suggestion"}],"isCorrect":true/false}
-ADVANCED RULES:
-- Correct ALL real mistakes strictly
-- Grammar, tense, punctuation, articles, prepositions, spelling
-- Use type "error" for real mistakes, "suggestion" for improvements
-- Only mark the WRONG PART — never the whole sentence
-- "Nothing happened" is correct — do not change it unless context is wrong
-- Punctuation: correct all punctuation errors`
+Format: {"reply":"your response — always end with a follow-up question","corrections":[{"wrong":"ONLY the incorrect word or phrase","correct":"corrected version","explanation":"detailed explanation","type":"error or suggestion"}],"isCorrect":true/false}
+RULES: Correct ALL mistakes strictly. Grammar, tense, punctuation, articles.`
 };
 return rules[level];
 };
+
 const highlightSentence=(sentence,corrections)=>{
 if(!corrections||corrections.length===0)return null;
 let result=sentence;
@@ -166,17 +163,26 @@ return React.createElement("span",{key:i,className:"word-wrong"},word);
 return React.createElement("span",{key:i,className:"word-normal"},part);
 });
 };
+
 const buildCorrectSentence=(original,corrections)=>{
 let result=original;
 corrections?.forEach(c=>{result=result.replace(c.wrong,c.correct)});
 return result;
 };
+
 const call=async(h,sys)=>{
 const r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:h,system:sys})});
 const d=await r.json();
 return d.content;
 };
+
 const parse=(t)=>{try{return JSON.parse(t.replace(/```json|```/g,"").trim())}catch{return{reply:t,corrections:[],isCorrect:true}}};
+
+const loadSaved=()=>{
+try{const s=localStorage.getItem("speakright_v2");return s?JSON.parse(s):{correct:0,mistakes:0,streak:0,xp:0,badges:[]};}
+catch{return{correct:0,mistakes:0,streak:0,xp:0,badges:[]};}
+};
+
 function App(){
 const[screen,setScreen]=useState("welcome");
 const[level,setLevel]=useState(null);
@@ -185,69 +191,100 @@ const[msgs,setMsgs]=useState([]);
 const[input,setInput]=useState("");
 const[loading,setLoading]=useState(false);
 const[hist,setHist]=useState([]);
-const[stats,setStats]=useState({correct:0,mistakes:0,streak:0});
+const[stats,setStats]=useState(loadSaved);
 const[listening,setListening]=useState(false);
+const[learningMode,setLearningMode]=useState(true);
+const[toast,setToast]=useState(null);
 const endRef=useRef(null);
+const inputRef=useRef(null);
 const recognitionRef=useRef(null);
+
 useEffect(()=>{endRef.current?.scrollIntoView({behavior:"smooth"})},[msgs,loading]);
+useEffect(()=>{localStorage.setItem("speakright_v2",JSON.stringify(stats));},[stats]);
+
+const showToast=(msg)=>{setToast(msg);setTimeout(()=>setToast(null),2500);};
+
+const checkBadges=(ns)=>{
+const e=[...ns.badges];
+if(!e.includes("first")&&ns.correct>=1){e.push("first");showToast("🌟 Badge: First Message!");}
+if(!e.includes("perfect5")&&ns.correct>=5){e.push("perfect5");showToast("✅ Badge: 5 Perfect Sentences!");}
+if(!e.includes("streak3")&&ns.streak>=3){e.push("streak3");showToast("🔥 Badge: 3 Streak!");}
+if(!e.includes("streak7")&&ns.streak>=7){e.push("streak7");showToast("🏆 Badge: 7 Streak!");}
+if(!e.includes("xp100")&&ns.xp>=100){e.push("xp100");showToast("💎 Badge: 100 XP!");}
+return e;
+};
+
 const startListen=()=>{
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-if(!SR){alert("Your browser doesn't support voice input! Try Chrome.");return;}
+if(!SR){alert("Voice input needs Chrome browser!");return;}
 const r=new SR();
 r.lang="en-US";r.continuous=false;r.interimResults=false;
 r.onstart=()=>setListening(true);
 r.onend=()=>setListening(false);
-r.onresult=(e)=>{setInput(e.results[0][0].transcript);};
+r.onresult=(e)=>setInput(e.results[0][0].transcript);
 r.onerror=()=>setListening(false);
-recognitionRef.current=r;
-r.start();
+recognitionRef.current=r;r.start();
 };
-const stopListen=()=>{
-recognitionRef.current?.stop();
-setListening(false);
-};
-const selectLevel=(lv)=>{setLevel(lv);setScreen("topic")};
+
+const stopListen=()=>{recognitionRef.current?.stop();setListening(false);};
+
+const selectLevel=(lv)=>{setLevel(lv);setScreen("topic");};
+
 const startTopic=async(tp)=>{
 setTopic(tp);setMsgs([]);setHist([]);setScreen("chat");setLoading(true);
-const h=[{role:"user",content:"Start the conversation with a natural opening line."}];
-const text=await call(h,getSys(tp.label,level.id,tp.id));
+const h=[{role:"user",content:"Start the conversation with a friendly opening line and a question."}];
+const text=await call(h,getSys(tp.label,level.id,tp.id,learningMode));
 const p=parse(text);
-const correctedSentence=buildCorrectSentence(h[0].content,p.corrections);
 setMsgs([{role:"bot",content:p.reply}]);
 setHist([...h,{role:"assistant",content:text}]);
 setLoading(false);
+setTimeout(()=>inputRef.current?.focus(),100);
 };
+
 const send=async()=>{
 if(!input.trim()||loading)return;
 const m=input.trim();setInput("");setLoading(true);
 const entry={role:"user",content:m,corrections:null,isCorrect:null};
 setMsgs(prev=>[...prev,entry]);
 const nh=[...hist,{role:"user",content:m}];
-const text=await call(nh,getSys(topic.label,level.id,topic.id));
+const text=await call(nh,getSys(topic.label,level.id,topic.id,learningMode));
 const p=parse(text);
-setStats(prev=>({correct:p.isCorrect?prev.correct+1:prev.correct,mistakes:prev.mistakes+(p.corrections?.length||0),streak:p.isCorrect?prev.streak+1:0}));
+const xpGain=p.isCorrect?10:3;
+setStats(prev=>{
+const ns={correct:p.isCorrect?prev.correct+1:prev.correct,mistakes:prev.mistakes+(p.corrections?.length||0),streak:p.isCorrect?prev.streak+1:0,xp:prev.xp+xpGain,badges:prev.badges};
+ns.badges=checkBadges(ns);
+return ns;
+});
 const correctedSentence=buildCorrectSentence(m,p.corrections);
 setMsgs(prev=>{const u=[...prev];u[u.length-1]={...entry,corrections:p.corrections||[],isCorrect:p.isCorrect,correctedSentence};return[...u,{role:"bot",content:p.reply}]});
 setHist([...nh,{role:"assistant",content:text}]);
 setLoading(false);
+setTimeout(()=>inputRef.current?.focus(),100);
 };
+
+const xpLevel=Math.floor(stats.xp/100)+1;
+const xpProgress=stats.xp%100;
+
 if(screen==="welcome")return(
 <div className="app"><div className="welcome">
+{toast&&<div className="toast">{toast}</div>}
 <div className="welcome-logo">🗣️</div>
 <h1>Speak<span>Right</span></h1>
 <p className="welcome-sub">Chat in English. Make mistakes. Learn instantly.</p>
 <div className="features-grid">
 <div className="feature-card"><div className="icon">✍️</div><div className="text">Grammar Correction</div></div>
-<div className="feature-card"><div className="icon">📘</div><div className="text">Explanations</div></div>
-<div className="feature-card"><div className="icon">🔥</div><div className="text">Daily Streaks</div></div>
 <div className="feature-card"><div className="icon">🎤</div><div className="text">Voice Input</div></div>
+<div className="feature-card"><div className="icon">🏆</div><div className="text">XP & Badges</div></div>
+<div className="feature-card"><div className="icon">💾</div><div className="text">Progress Saved</div></div>
 </div>
 <p className="made-by">✦ Made by Arshad ✦</p>
 <button className="start-btn" onClick={()=>setScreen("level")}>Start Practicing →</button>
 </div></div>
 );
+
 if(screen==="level")return(
 <div className="app"><div className="level-screen">
+{toast&&<div className="toast">{toast}</div>}
 <div className="level-header"><h2>Choose Your Level</h2><p>Pick the level that matches your English</p></div>
 <div className="levels-list">
 {LEVELS.map(lv=>(
@@ -260,12 +297,25 @@ if(screen==="level")return(
 </div>
 </div></div>
 );
+
 if(screen==="topic")return(
 <div className="app"><div className="topic-screen">
+{toast&&<div className="toast">{toast}</div>}
 <div className="topic-header">
 <div className="level-badge" style={{background:level.bg,color:level.color,border:`1px solid ${level.border}`}}>{level.emoji} {level.label} Level</div>
 <h2>Choose a Scenario</h2><p>Pick a situation to practice</p>
 </div>
+<div className="xp-bar-wrap">
+<div className="xp-label"><span>⭐ Level {xpLevel}</span><span>{stats.xp} XP total</span></div>
+<div className="xp-bar"><div className="xp-fill" style={{width:`${xpProgress}%`}}/></div>
+</div>
+{stats.badges.length>0&&(
+<div className="badges-row">
+{BADGE_LIST.filter(b=>stats.badges.includes(b.id)).map(b=>(
+<div key={b.id} className="badge earned">{b.emoji} {b.label}</div>
+))}
+</div>
+)}
 <div className="topics-list">
 {TOPICS.map(tp=>(
 <div className="topic-card" key={tp.id} onClick={()=>startTopic(tp)}>
@@ -282,11 +332,14 @@ if(screen==="topic")return(
 </div>
 </div></div>
 );
+
 return(
 <div className="app"><div className="chat-screen">
+{toast&&<div className="toast">{toast}</div>}
 <div className="chat-header">
 <button className="back-btn" onClick={()=>setScreen("topic")}>‹</button>
-<div style={{flex:1}}><div className="chat-topic-name">{topic?.emoji} {topic?.label}</div><div className="chat-topic-sub">{level?.emoji} {level?.label} • Corrections ON</div></div>
+<div style={{flex:1}}><div className="chat-topic-name">{topic?.emoji} {topic?.label}</div><div className="chat-topic-sub">{level?.emoji} {level?.label} • {learningMode?"📘 Learning":"🟢 Practice"}</div></div>
+<button className="mode-toggle" onClick={()=>setLearningMode(m=>!m)} title="Toggle mode">{learningMode?"📘":"🟢"}</button>
 <div className="streak-badge">🔥{stats.streak}</div>
 </div>
 <div className="messages">
@@ -294,27 +347,16 @@ return(
 <div key={i} className={`message-row ${msg.role}`}>
 <div className={`bubble ${msg.role}`}>{msg.content}</div>
 {msg.role==="user"&&msg.isCorrect===true&&msg.corrections!==null&&(
-<div style={{fontSize:11,color:"#4ECDC4",fontWeight:600,marginTop:5}}>✅ Perfect sentence!</div>
+<div style={{fontSize:11,color:"#4ECDC4",fontWeight:600,marginTop:5}}>✅ Perfect! +10 XP</div>
 )}
 {msg.role==="user"&&msg.corrections&&msg.corrections.length>0&&(
-<div className="correction-box">{msg.correctedSentence && (
-  <div style={{marginTop:8,color:"#4ECDC4",fontWeight:600}}>
-    ✅ Full sentence: {msg.correctedSentence}
-  </div>
-)}
-  <div className="sentence-display">
-{highlightSentence(msg.content,msg.corrections)||msg.content}
-</div>
+<div className="correction-box">
+{msg.correctedSentence&&<div style={{color:"#4ECDC4",fontWeight:600,marginBottom:8}}>✅ {msg.correctedSentence}</div>}
+<div className="sentence-display">{highlightSentence(msg.content,msg.corrections)||msg.content}</div>
 {msg.corrections.map((c,j)=>(
 <div key={j} className="correction-item">
-<div className={`type-badge ${c.type==="suggestion"?"type-suggest":"type-error"}`}>
-{c.type==="suggestion"?"💡 Suggestion":"❌ Error"}
-</div>
-<div>
-<span className="correction-wrong">{c.wrong}</span>
-<span className="correction-arrow">→</span>
-<span className={c.type==="suggestion"?"correction-suggest":"correction-right"}>{c.correct}</span>
-</div>
+<div className={`type-badge ${c.type==="suggestion"?"type-suggest":"type-error"}`}>{c.type==="suggestion"?"💡 Suggestion":"❌ Error"}</div>
+<div><span className="correction-wrong">{c.wrong}</span><span className="correction-arrow">→</span><span className={c.type==="suggestion"?"correction-suggest":"correction-right"}>{c.correct}</span></div>
 <div className="correction-explain">📘 {c.explanation}</div>
 </div>
 ))}
@@ -322,12 +364,12 @@ return(
 )}
 </div>
 ))}
-{loading&&<div className="message-row bot"><div className="typing-dots"><div className="dot"/><div className="dot"/><div className="dot"/></div></div>}
+{loading&&<div className="message-row bot"><div className="typing-indicator">SpeakRight is typing...</div></div>}
 <div ref={endRef}/>
 </div>
 <div className="input-area">
-<textarea className="message-input" value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send()}}} placeholder="Type or speak in English..." rows={1}/>
-<button className={`send-btn mic-btn ${listening?"listening":""}`} onClick={listening?stopListen:startListen} title="Voice input">🎤</button>
+<textarea ref={inputRef} className="message-input" value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send()}}} placeholder="Type or speak in English..." rows={1}/>
+<button className={`send-btn mic-btn ${listening?"listening":""}`} onClick={listening?stopListen:startListen}>🎤</button>
 <button className="send-btn" onClick={send} disabled={loading||!input.trim()}>↑</button>
 </div>
 </div></div>
