@@ -11,13 +11,12 @@ export default async function handler(req, res) {
         "X-Title": "SpeakRight"
       },
       body: JSON.stringify({
-        model: "mistralai/mistral-7b-instruct:free",
+        model: "google/gemma-3-4b-it:free",
         messages: [{ role: "system", content: system }, ...messages]
       })
     });
     const data = await response.json();
-    console.log("RESULT:", JSON.stringify(data));
-    const text = data.choices?.[0]?.message?.content || "error: " + JSON.stringify(data);
+    const text = data.choices?.[0]?.message?.content || "";
     res.status(200).json({ content: text });
   } catch(err) {
     console.error(err);
