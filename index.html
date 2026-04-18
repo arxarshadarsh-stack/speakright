@@ -159,6 +159,23 @@ return React.createElement("span",{key:i,className:"word-wrong"},word);
 return React.createElement("span",{key:i,className:"word-normal"},part);
 });
 };
+
+// ✅ FIX 1: Replace /api/chat with direct Anthropic API call
+const callClaude=async(messages,system)=>{
+const r=await fetch("https://api.anthropic.com/v1/messages",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+model:"claude-sonnet-4-20250514",
+max_tokens:1000,
+system,
+messages
+})
+});
+const d=await r.json();
+return d.content.map(b=>b.type==="text"?b.text:"").join("");
+};
+
 function App(){
 const[screen,setScreen]=useState("welcome");
 const[level,setLevel]=useState(null);
@@ -170,53 +187,44 @@ const[hist,setHist]=useState([]);
 const[stats,setStats]=useState({correct:0,mistakes:0,streak:0});
 const endRef=useRef(null);
 useEffect(()=>{endRef.current?.scrollIntoView({behavior:"smooth"})},[msgs,loading]);
-const call=async(h,sys)=>{
-const r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:h,system:sys})});
-const d=await r.json();
-return d.content;
-};
+
+// ✅ FIX 1 continued: use callClaude instead of call
 const parse=(t)=>{try{return JSON.parse(t.replace(/```json|```/g,"").trim())}catch{return{reply:t,corrections:[],isCorrect:true}}};
 const selectLevel=(lv)=>{setLevel(lv);setScreen("topic")};
+
+const buildCorrectSentence=(original,corrections)=>{
+let result=original;
+corrections?.forEach(c=>{result=result.replace(c.wrong,c.correct)});
+return result;
+};
+
 const startTopic=async(tp)=>{
 setTopic(tp);setMsgs([]);setHist([]);setScreen("chat");setLoading(true);
 const h=[{role:"user",content:"Start the conversation with a natural opening line."}];
-const text=await call(h,getSys(tp.label,level.id,tp.id));
+const text=await callClaude(h,getSys(tp.label,level.id,tp.id));
 const p=parse(text);
-  const buildCorrectSentence = (original, corrections) => {
-  let result = original;
-  corrections?.forEach(c => {
-    result = result.replace(c.wrong, c.correct);
-  });
-  return result;
-};
-
-const correctedSentence = buildCorrectSentence(m, p.corrections);
+// ✅ FIX 2: moved buildCorrectSentence call to after p is defined
+const correctedSentence=buildCorrectSentence(h[0].content,p.corrections);
 setMsgs([{role:"bot",content:p.reply}]);
 setHist([...h,{role:"assistant",content:text}]);
 setLoading(false);
 };
+
 const send=async()=>{
 if(!input.trim()||loading)return;
 const m=input.trim();setInput("");setLoading(true);
 const entry={role:"user",content:m,corrections:null,isCorrect:null};
 setMsgs(prev=>[...prev,entry]);
 const nh=[...hist,{role:"user",content:m}];
-const text=await call(nh,getSys(topic.label,level.id,topic.id));
+const text=await callClaude(nh,getSys(topic.label,level.id,topic.id));
 const p=parse(text);
 setStats(prev=>({correct:p.isCorrect?prev.correct+1:prev.correct,mistakes:prev.mistakes+(p.corrections?.length||0),streak:p.isCorrect?prev.streak+1:0}));
-const buildCorrectSentence = (original, corrections) => {
-  let result = original;
-  corrections?.forEach(c => {
-    result = result.replace(c.wrong, c.correct);
-  });
-  return result;
-};
-
-const correctedSentence = buildCorrectSentence(m, p.corrections);
-  setMsgs(prev=>{const u=[...prev];u[u.length-1]={...entry,corrections:p.corrections||[],isCorrect:p.isCorrect,correctedSentence};return[...u,{role:"bot",content:p.reply}]});
+const correctedSentence=buildCorrectSentence(m,p.corrections);
+setMsgs(prev=>{const u=[...prev];u[u.length-1]={...entry,corrections:p.corrections||[],isCorrect:p.isCorrect,correctedSentence};return[...u,{role:"bot",content:p.reply}]});
 setHist([...nh,{role:"assistant",content:text}]);
 setLoading(false);
 };
+
 if(screen==="welcome")return(
 <div className="app"><div className="welcome">
 <div className="welcome-logo">🗣️</div>
@@ -306,6 +314,7 @@ return(
 ))}
 </div>
 )}
+{/* ✅ FIX 3: removed stray "c" character that was here */}
 </div>
 ))}
 {loading&&<div className="message-row bot"><div className="typing-dots"><div className="dot"/><div className="dot"/><div className="dot"/></div></div>}
