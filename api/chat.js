@@ -11,7 +11,7 @@ export default async function handler(req, res) {
         "X-Title": "SpeakRight"
       },
       body: JSON.stringify({
-        model: "google/gemma-2-9b-it:free",
+        model: "openai/gpt-4o-mini",
         messages: [{ role: "system", content: system }, ...messages]
       })
     });
