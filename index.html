@@ -11,25 +11,48 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --bg:#08090E;
-  --surface:#0F1118;
-  --surface2:#161820;
-  --border:rgba(255,255,255,0.07);
-  --text:#F0F0FF;
+  --bg:#050508;
+  --surface:rgba(255,255,255,0.04);
+  --surface2:rgba(255,255,255,0.07);
+  --border:rgba(255,255,255,0.08);
+  --text:#EEEEFF;
   --muted:#6B6D85;
-  --accent:#6C63FF;
+  --accent:#7C6FFF;
+  --accent2:#FF6B9D;
   --green:#00D4AA;
   --yellow:#FFD166;
   --red:#FF6B6B;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-.app{min-height:100vh;max-width:440px;margin:0 auto;display:flex;flex-direction:column}
-@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-7px)}}
-@keyframes glow{0%,100%{box-shadow:0 0 24px rgba(108,99,255,0.3)}50%{box-shadow:0 0 48px rgba(108,99,255,0.55)}}
-@keyframes pop{0%{transform:scale(0.94);opacity:0}100%{transform:scale(1);opacity:1}}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+.app{min-height:100vh;max-width:440px;margin:0 auto;display:flex;flex-direction:column;position:relative}
+
+/* ── ANIMATED BACKGROUND ORBS ── */
+.orbs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:0.7}
+.orb1{width:480px;height:480px;background:radial-gradient(circle,rgba(124,111,255,0.38) 0%,transparent 70%);top:-160px;left:-140px;animation:drift1 13s ease-in-out infinite}
+.orb2{width:340px;height:340px;background:radial-gradient(circle,rgba(255,107,157,0.28) 0%,transparent 70%);bottom:40px;right:-80px;animation:drift2 11s ease-in-out infinite}
+.orb3{width:280px;height:280px;background:radial-gradient(circle,rgba(0,212,170,0.18) 0%,transparent 70%);top:45%;left:25%;animation:drift3 16s ease-in-out infinite}
+
+@keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(44px,-44px)}}
+@keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(-32px,32px)}}
+@keyframes drift3{0%,100%{transform:translate(0,0)}33%{transform:translate(22px,-22px)}66%{transform:translate(-18px,14px)}}
+
+/* Noise overlay */
+.noise{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:0.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:180px 180px}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes pulseRing{0%{box-shadow:0 0 0 0 rgba(124,111,255,0.55)}70%{box-shadow:0 0 0 16px rgba(124,111,255,0)}100%{box-shadow:0 0 0 0 rgba(124,111,255,0)}}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-8px)}}
+@keyframes pop{0%{transform:scale(0.9);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes xpFloat{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-60px);opacity:0}}
+@keyframes shimmer{0%{background-position:0% center}100%{background-position:200% center}}
+@keyframes borderPulse{0%,100%{border-color:rgba(124,111,255,0.25)}50%{border-color:rgba(124,111,255,0.65)}}
+@keyframes greenPulse{0%,100%{opacity:1}50%{opacity:0.3}}
+@keyframes scanAI{0%{transform:scaleX(0);opacity:0.8}100%{transform:scaleX(1);opacity:0}}
+
 .a1{animation:fadeUp 0.45s 0.05s ease both}
 .a2{animation:fadeUp 0.45s 0.15s ease both}
 .a3{animation:fadeUp 0.45s 0.25s ease both}
@@ -37,111 +60,168 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .a5{animation:fadeUp 0.45s 0.45s ease both}
 .a6{animation:fadeUp 0.45s 0.55s ease both}
 
-/* WELCOME */
-.welcome{min-height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden}
-.glow1{position:absolute;top:-80px;left:-80px;width:360px;height:360px;background:radial-gradient(circle,rgba(108,99,255,0.18) 0%,transparent 70%);pointer-events:none}
-.glow2{position:absolute;bottom:0;right:-60px;width:280px;height:280px;background:radial-gradient(circle,rgba(255,107,157,0.14) 0%,transparent 70%);pointer-events:none}
-.welcome-inner{position:relative;z-index:1;display:flex;flex-direction:column;flex:1;padding:56px 26px 40px}
-.logo-badge{display:inline-flex;align-items:center;justify-content:center;width:86px;height:86px;background:linear-gradient(135deg,rgba(108,99,255,0.22),rgba(255,107,157,0.18));border:1px solid rgba(108,99,255,0.35);border-radius:26px;font-size:40px;margin-bottom:24px;animation:float 3.2s ease-in-out infinite;box-shadow:0 8px 32px rgba(108,99,255,0.18)}
-.tag-pill{display:inline-block;background:rgba(108,99,255,0.14);border:1px solid rgba(108,99,255,0.28);color:#A89FFF;font-size:11px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:14px}
-.welcome h1{font-size:36px;font-weight:800;line-height:1.18;letter-spacing:-1.2px;margin-bottom:12px}
-.welcome h1 em{font-style:normal;background:linear-gradient(135deg,#6C63FF 30%,#FF6B9D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.welcome-sub{color:var(--muted);font-size:14.5px;line-height:1.65;margin-bottom:32px;max-width:310px}
-.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:30px}
-.feat-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px 14px;transition:border-color 0.2s}
-.feat-card:hover{border-color:rgba(108,99,255,0.3)}
-.feat-icon{font-size:22px;margin-bottom:8px}
+/* ── WELCOME SCREEN ── */
+.welcome{min-height:100vh;display:flex;flex-direction:column;position:relative;z-index:2}
+.welcome-inner{display:flex;flex-direction:column;flex:1;padding:52px 22px 38px}
+
+.ai-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(124,111,255,0.1);border:1px solid rgba(124,111,255,0.3);border-radius:24px;padding:7px 15px;font-size:11.5px;font-weight:700;color:#B0A8FF;letter-spacing:0.4px;margin-bottom:20px;width:fit-content;animation:borderPulse 3s ease-in-out infinite}
+.ai-live-dot{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 8px var(--green);animation:greenPulse 1.8s ease-in-out infinite}
+
+.logo-badge{width:90px;height:90px;background:linear-gradient(135deg,rgba(124,111,255,0.22),rgba(255,107,157,0.16));border:1px solid rgba(124,111,255,0.35);border-radius:28px;display:flex;align-items:center;justify-content:center;font-size:42px;margin-bottom:20px;animation:float 3.4s ease-in-out infinite;box-shadow:0 0 50px rgba(124,111,255,0.22),0 20px 48px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.18)}
+
+.welcome h1{font-size:34px;font-weight:800;line-height:1.17;letter-spacing:-1.2px;margin-bottom:13px}
+.welcome h1 em{font-style:normal;background:linear-gradient(135deg,#7C6FFF 0%,#FF6B9D 55%,#FFD166 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 4s linear infinite}
+.welcome-sub{color:var(--muted);font-size:14px;line-height:1.7;margin-bottom:22px}
+
+/* ── DEMO PREVIEW CARD ── */
+.demo-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.09);border-radius:22px;padding:16px;margin-bottom:20px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:0 8px 32px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.07)}
+.demo-label{font-size:9.5px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.demo-label span{width:16px;height:1px;background:var(--muted);display:inline-block}
+.demo-user-bubble{background:linear-gradient(135deg,#7C6FFF,#9B8FFF);border-radius:16px 16px 4px 16px;padding:10px 14px;font-size:13px;color:#fff;font-weight:500;width:fit-content;margin-left:auto;max-width:85%;margin-bottom:9px;box-shadow:0 4px 16px rgba(124,111,255,0.35)}
+.demo-error-row{display:flex;align-items:center;gap:8px;background:rgba(255,107,107,0.09);border:1px solid rgba(255,107,107,0.2);border-radius:11px;padding:8px 12px;margin-bottom:9px;font-size:12px}
+.demo-fix{color:var(--red);text-decoration:line-through;font-weight:600}
+.demo-arr{color:var(--muted);font-size:11px}
+.demo-ok{color:var(--green);font-weight:700}
+.demo-ai-bubble{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:16px 16px 16px 4px;padding:10px 14px;font-size:12.5px;color:var(--text);width:fit-content;max-width:85%;box-shadow:0 4px 16px rgba(0,0,0,0.2)}
+
+/* ── STATS ROW ── */
+.stats-hero{display:flex;margin-bottom:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:18px;overflow:hidden;backdrop-filter:blur(16px)}
+.stat-hero{flex:1;text-align:center;padding:14px 6px;border-right:1px solid rgba(255,255,255,0.06)}
+.stat-hero:last-child{border-right:none}
+.stat-hero-num{font-size:18px;font-weight:800;background:linear-gradient(135deg,#7C6FFF,#FF6B9D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-hero-label{font-size:10px;color:var(--muted);font-weight:600;margin-top:2px;letter-spacing:0.3px}
+
+/* ── FEATURE CARDS ── */
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}
+.feat-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:20px;padding:17px 14px;transition:all 0.3s;cursor:default;backdrop-filter:blur(12px);position:relative;overflow:hidden}
+.feat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(124,111,255,0.1),transparent);opacity:0;transition:opacity 0.3s}
+.feat-card:hover::before{opacity:1}
+.feat-card:hover{border-color:rgba(124,111,255,0.3);transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,0.35),0 0 24px rgba(124,111,255,0.1)}
+.feat-icon{font-size:22px;margin-bottom:9px}
 .feat-name{font-size:13px;font-weight:700;margin-bottom:2px}
-.feat-text{font-size:11px;color:var(--muted);line-height:1.4}
+.feat-text{font-size:11px;color:var(--muted);line-height:1.45}
+
 .made-by{text-align:center;font-size:12px;color:var(--muted);margin-bottom:14px}
 .made-by b{color:var(--accent)}
-.start-btn{width:100%;background:linear-gradient(135deg,#6C63FF,#8B7FFF);color:#fff;border:none;border-radius:16px;padding:17px;font-size:15.5px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all 0.25s;animation:glow 2.5s ease-in-out infinite}
-.start-btn:hover{transform:translateY(-2px);filter:brightness(1.1)}
+
+.start-btn{width:100%;background:linear-gradient(135deg,#7C6FFF,#9B8FFF);color:#fff;border:none;border-radius:18px;padding:18px;font-size:15.5px;font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden;letter-spacing:0.2px;box-shadow:0 0 40px rgba(124,111,255,0.3),0 16px 40px rgba(124,111,255,0.2);animation:pulseRing 3s ease-in-out infinite}
+.start-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.18),transparent)}
+.start-btn:hover{transform:translateY(-3px);box-shadow:0 20px 60px rgba(124,111,255,0.45),0 0 60px rgba(124,111,255,0.2);filter:brightness(1.08)}
 .start-btn:active{transform:translateY(1px)}
 
-/* LEVEL */
-.level-screen{min-height:100vh;background:var(--bg);display:flex;flex-direction:column}
+/* ── LEVEL SCREEN ── */
+.level-screen,.topic-screen{min-height:100vh;background:transparent;display:flex;flex-direction:column;position:relative;z-index:2}
 .top-header{padding:52px 22px 20px}
-.top-header h2{font-size:26px;font-weight:800;letter-spacing:-0.6px;margin-bottom:4px}
+.top-header h2{font-size:28px;font-weight:800;letter-spacing:-0.8px;margin-bottom:4px}
 .top-header p{color:var(--muted);font-size:13.5px}
-.back-btn{background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:12px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;margin-bottom:20px;transition:all 0.2s}
-.back-btn:hover{background:var(--surface2)}
-.levels-list{padding:4px 20px;flex:1}
-.level-card{display:flex;align-items:center;gap:14px;border-radius:20px;padding:18px;margin-bottom:11px;cursor:pointer;transition:all 0.22s;border:1.5px solid transparent;position:relative}
-.level-card:hover{transform:translateX(5px)}
-.level-card-arrow{color:rgba(255,255,255,0.25);font-size:22px;margin-left:auto;transition:all 0.2s}
-.level-card:hover .level-card-arrow{color:rgba(255,255,255,0.7)}
-.level-icon{width:54px;height:54px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
-.level-name{font-weight:800;font-size:16px;margin-bottom:3px}
-.level-desc{font-size:12.5px;color:var(--muted)}
+.back-btn{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:var(--text);border-radius:12px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;margin-bottom:20px;transition:all 0.25s;backdrop-filter:blur(12px)}
+.back-btn:hover{background:rgba(124,111,255,0.12);border-color:rgba(124,111,255,0.35);box-shadow:0 0 24px rgba(124,111,255,0.15)}
 
-/* TOPIC */
-.topic-screen{min-height:100vh;background:var(--bg);display:flex;flex-direction:column}
-.level-pill{display:inline-block;padding:5px 13px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:10px}
+.levels-list{padding:4px 20px;flex:1}
+.level-card{display:flex;align-items:center;gap:14px;border-radius:24px;padding:20px;margin-bottom:12px;cursor:pointer;transition:all 0.3s;border:1.5px solid transparent;position:relative;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 24px rgba(0,0,0,0.25);overflow:hidden}
+.level-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.07),transparent);opacity:0;transition:opacity 0.3s;pointer-events:none}
+.level-card:hover::after{opacity:1}
+.level-card:hover{transform:translateY(-5px) scale(1.01);box-shadow:0 20px 56px rgba(0,0,0,0.45)}
+.level-card-arrow{color:rgba(255,255,255,0.2);font-size:22px;margin-left:auto;transition:all 0.3s}
+.level-card:hover .level-card-arrow{color:rgba(255,255,255,0.85);transform:translateX(5px)}
+.level-icon{width:56px;height:56px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;box-shadow:inset 0 1px 0 rgba(255,255,255,0.2),0 4px 12px rgba(0,0,0,0.3)}
+.level-name{font-weight:800;font-size:16px;margin-bottom:3px}
+.level-desc{font-size:12.5px;color:rgba(255,255,255,0.5)}
+
+/* ── TOPIC SCREEN ── */
+.level-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:10px}
 .topics-list{padding:4px 20px;flex:1}
-.topic-card{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:17px 18px;margin-bottom:10px;cursor:pointer;transition:all 0.22s;position:relative}
-.topic-card:hover{background:var(--surface2);border-color:rgba(108,99,255,0.25);transform:translateX(4px)}
-.topic-card-arrow{color:var(--muted);font-size:20px;margin-left:auto;transition:all 0.2s}
-.topic-card:hover .topic-card-arrow{color:var(--text)}
-.topic-icon{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
-.topic-name{font-weight:700;font-size:15px;margin-bottom:2px}
-.topic-desc{color:var(--muted);font-size:12.5px}
-.stats-bar{margin:14px 20px 28px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:18px 20px;display:flex;justify-content:space-around}
+.topic-card{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:22px;padding:18px;margin-bottom:10px;cursor:pointer;transition:all 0.3s;position:relative;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 4px 20px rgba(0,0,0,0.2);overflow:hidden}
+.topic-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(124,111,255,0.09),transparent);opacity:0;transition:opacity 0.3s;pointer-events:none}
+.topic-card:hover::after{opacity:1}
+.topic-card:hover{border-color:rgba(124,111,255,0.3);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,0.38),0 0 32px rgba(124,111,255,0.1)}
+.topic-card-arrow{color:var(--muted);font-size:20px;margin-left:auto;transition:all 0.3s;z-index:1}
+.topic-card:hover .topic-card-arrow{color:var(--text);transform:translateX(5px)}
+.topic-icon{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;z-index:1;box-shadow:inset 0 1px 0 rgba(255,255,255,0.18)}
+.topic-name{font-weight:700;font-size:15px;margin-bottom:2px;z-index:1;position:relative}
+.topic-desc{color:var(--muted);font-size:12.5px;z-index:1;position:relative}
+.stats-bar{margin:14px 20px 28px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:22px;padding:18px 20px;display:flex;justify-content:space-around;backdrop-filter:blur(18px);box-shadow:0 4px 24px rgba(0,0,0,0.22)}
 .stat{text-align:center}
 .stat-num{font-size:24px;font-weight:800;line-height:1}
 .stat-label{font-size:10.5px;color:var(--muted);margin-top:3px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase}
 
-/* CHAT */
-.chat-screen{min-height:100vh;background:var(--bg);display:flex;flex-direction:column}
-.chat-header{padding:46px 18px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border)}
-.chat-back{background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:12px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;flex-shrink:0;transition:all 0.2s}
-.chat-back:hover{background:var(--surface2)}
+/* ── CHAT SCREEN ── */
+.chat-screen{min-height:100vh;background:transparent;display:flex;flex-direction:column;position:relative;z-index:2}
+.chat-header{padding:46px 16px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,0.07);background:rgba(5,5,8,0.82);backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px)}
+.chat-back{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:var(--text);border-radius:12px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;flex-shrink:0;transition:all 0.25s}
+.chat-back:hover{background:rgba(124,111,255,0.12);border-color:rgba(124,111,255,0.35);box-shadow:0 0 20px rgba(124,111,255,0.15)}
 .chat-topic-name{font-weight:700;font-size:15px;line-height:1.2}
-.chat-topic-sub{font-size:11.5px;color:var(--muted);margin-top:2px}
-.streak-pill{background:rgba(255,107,107,0.12);border:1px solid rgba(255,107,107,0.25);border-radius:10px;padding:5px 11px;font-size:13px;font-weight:700;color:var(--red);white-space:nowrap}
-.messages{flex:1;overflow-y:auto;padding:18px 16px;display:flex;flex-direction:column}
+.chat-topic-sub{font-size:11.5px;color:var(--muted);margin-top:2px;display:flex;align-items:center;gap:5px}
+.live-dot{width:6px;height:6px;background:var(--green);border-radius:50%;box-shadow:0 0 6px var(--green);display:inline-block;animation:greenPulse 1.6s ease-in-out infinite}
+.streak-pill{background:rgba(255,107,107,0.12);border:1px solid rgba(255,107,107,0.25);border-radius:12px;padding:6px 12px;font-size:13px;font-weight:700;color:var(--red);white-space:nowrap}
+
+/* Grammar score widget */
+.score-widget{display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0}
+.score-label-sm{font-size:8.5px;color:var(--muted);font-weight:700;letter-spacing:0.8px;text-transform:uppercase}
+.score-num{font-size:16px;font-weight:800;line-height:1;transition:color 0.4s}
+.score-bar{width:44px;height:3px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;margin-top:1px}
+.score-fill{height:100%;border-radius:2px;transition:width 0.6s ease,background 0.4s ease}
+
+/* Messages */
+.messages{flex:1;overflow-y:auto;padding:18px 14px;display:flex;flex-direction:column}
 .messages::-webkit-scrollbar{width:3px}
-.messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:10px}
-.msg-row{display:flex;flex-direction:column;margin-bottom:12px}
+.messages::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:10px}
+.msg-row{display:flex;flex-direction:column;margin-bottom:14px;position:relative}
 .msg-row.user{align-items:flex-end}
 .msg-row.bot{align-items:flex-start}
-.bubble{max-width:80%;padding:12px 16px;border-radius:20px;font-size:14px;line-height:1.55;animation:pop 0.2s ease both}
-.bubble.user{background:linear-gradient(135deg,#6C63FF,#8B7FFF);color:#fff;border-bottom-right-radius:6px;font-weight:500}
-.bubble.bot{background:var(--surface);border:1px solid var(--border);color:var(--text);border-bottom-left-radius:6px}
-.perfect-tag{font-size:11px;color:var(--green);font-weight:700;margin-top:5px}
-.correction-box{max-width:92%;margin-top:7px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:13px 15px;animation:pop 0.2s ease both}
-.sentence-display{font-size:13.5px;line-height:1.85;margin-bottom:10px;flex-wrap:wrap;display:flex;gap:2px;align-items:baseline}
-.word-wrong{color:var(--red);text-decoration:line-through;font-weight:600}
+.bot-label{font-size:11px;color:var(--muted);font-weight:600;margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.bubble{max-width:82%;padding:13px 17px;border-radius:22px;font-size:14px;line-height:1.6;animation:pop 0.22s ease both}
+.bubble.user{background:linear-gradient(135deg,#7C6FFF,#9B8FFF);color:#fff;border-bottom-right-radius:6px;font-weight:500;box-shadow:0 4px 24px rgba(124,111,255,0.35)}
+.bubble.bot{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);color:var(--text);border-bottom-left-radius:6px;backdrop-filter:blur(12px);box-shadow:0 4px 20px rgba(0,0,0,0.25)}
+.perfect-tag{font-size:11px;color:var(--green);font-weight:700;margin-top:6px;display:flex;align-items:center;gap:4px}
+
+/* Correction box */
+.correction-box{max-width:94%;margin-top:9px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.09);border-radius:20px;padding:14px 16px;animation:pop 0.22s ease both;backdrop-filter:blur(18px);box-shadow:0 4px 24px rgba(0,0,0,0.25)}
+.corr-header{font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.sentence-display{font-size:13.5px;line-height:1.85;margin-bottom:10px;flex-wrap:wrap;display:flex;gap:3px;align-items:baseline}
+.word-wrong{color:var(--red);text-decoration:line-through;font-weight:700;background:rgba(255,107,107,0.1);padding:1px 5px;border-radius:5px}
 .word-normal{color:var(--text)}
-.corrected-full{font-size:12.5px;color:var(--green);font-weight:600;margin-bottom:10px;padding:8px 11px;background:rgba(0,212,170,0.08);border-radius:10px;border:1px solid rgba(0,212,170,0.18)}
-.correction-item{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.corrected-full{font-size:12.5px;color:var(--green);font-weight:600;margin-bottom:12px;padding:9px 13px;background:rgba(0,212,170,0.07);border-radius:13px;border:1px solid rgba(0,212,170,0.18)}
+.correction-item{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06)}
 .correction-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
-.type-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;margin-bottom:5px}
-.type-error{background:rgba(255,107,107,0.15);color:var(--red)}
-.type-suggest{background:rgba(255,209,102,0.15);color:var(--yellow)}
-.c-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:4px}
+.type-badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 9px;border-radius:8px;margin-bottom:6px}
+.type-error{background:rgba(255,107,107,0.12);color:var(--red);border:1px solid rgba(255,107,107,0.2)}
+.type-suggest{background:rgba(255,209,102,0.12);color:var(--yellow);border:1px solid rgba(255,209,102,0.2)}
+.c-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:5px}
 .c-wrong{color:var(--red);font-size:13px;font-weight:600;text-decoration:line-through}
 .c-arrow{color:var(--muted);font-size:12px}
 .c-right{color:var(--green);font-size:13px;font-weight:700}
 .c-suggest{color:var(--yellow);font-size:13px;font-weight:700}
-.c-explain{font-size:12px;color:var(--muted);line-height:1.5}
-.typing-dots{background:var(--surface);border:1px solid var(--border);border-radius:20px;border-bottom-left-radius:6px;padding:14px 18px;display:flex;gap:5px;align-items:center}
-.dot{width:7px;height:7px;background:var(--muted);border-radius:50%;animation:bounce 1.2s infinite}
+.c-explain{font-size:12px;color:var(--muted);line-height:1.55}
+
+/* AI typing */
+.bot-typing{display:flex;flex-direction:column;gap:5px}
+.analyzing-label{font-size:11px;color:var(--accent);font-weight:700;display:flex;align-items:center;gap:6px;animation:fadeUp 0.3s ease both}
+.analyzing-bar{width:120px;height:2px;background:rgba(124,111,255,0.15);border-radius:2px;overflow:hidden}
+.analyzing-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;transform-origin:left;animation:scanAI 1.4s ease-in-out infinite}
+.typing-dots{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:22px;border-bottom-left-radius:6px;padding:14px 20px;display:flex;gap:6px;align-items:center;backdrop-filter:blur(12px)}
+.dot{width:7px;height:7px;background:var(--accent);border-radius:50%;animation:bounce 1.2s infinite;box-shadow:0 0 8px rgba(124,111,255,0.5)}
 .dot:nth-child(2){animation-delay:0.18s}
 .dot:nth-child(3){animation-delay:0.36s}
-.input-area{padding:10px 14px 28px;border-top:1px solid var(--border);display:flex;gap:10px;align-items:flex-end}
-.msg-input{flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:12px 16px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;outline:none;resize:none;transition:border-color 0.2s}
+
+/* XP popup */
+.xp-popup{position:absolute;right:8px;top:-8px;font-size:13px;font-weight:800;color:var(--green);animation:xpFloat 1.6s ease forwards;pointer-events:none;text-shadow:0 0 12px rgba(0,212,170,0.6);z-index:10}
+
+/* Input area */
+.input-area{padding:10px 14px 30px;border-top:1px solid rgba(255,255,255,0.07);display:flex;gap:10px;align-items:flex-end;background:rgba(5,5,8,0.82);backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px)}
+.msg-input{flex:1;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.09);border-radius:18px;padding:13px 17px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;outline:none;resize:none;transition:all 0.25s;backdrop-filter:blur(12px)}
 .msg-input::placeholder{color:var(--muted)}
-.msg-input:focus{border-color:rgba(108,99,255,0.5)}
-.send-btn{width:46px;height:46px;background:linear-gradient(135deg,#6C63FF,#8B7FFF);border:none;border-radius:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:20px;color:#fff;transition:all 0.2s}
-.send-btn:hover{transform:scale(1.07)}
-.send-btn:disabled{background:rgba(108,99,255,0.3);cursor:not-allowed;transform:none}
+.msg-input:focus{border-color:rgba(124,111,255,0.5);background:rgba(124,111,255,0.06);box-shadow:0 0 0 4px rgba(124,111,255,0.08),0 4px 24px rgba(0,0,0,0.2)}
+.send-btn{width:48px;height:48px;background:linear-gradient(135deg,#7C6FFF,#9B8FFF);border:none;border-radius:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:20px;color:#fff;transition:all 0.25s;box-shadow:0 4px 24px rgba(124,111,255,0.3)}
+.send-btn:hover{transform:scale(1.09);box-shadow:0 8px 36px rgba(124,111,255,0.5)}
+.send-btn:disabled{background:rgba(124,111,255,0.2);cursor:not-allowed;transform:none;box-shadow:none}
 </style>
 </head>
 <body>
 <div id="root"></div>
 <script type="text/babel">
 const{useState,useRef,useEffect}=React;
+
 const LEVELS=[
   {id:"easy",emoji:"🌱",label:"Easy",desc:"For beginners — gentle corrections",color:"#00D4AA",bg:"rgba(0,212,170,0.1)",border:"rgba(0,212,170,0.3)"},
   {id:"intermediate",emoji:"🔥",label:"Intermediate",desc:"Balanced — for everyday learners",color:"#FFD166",bg:"rgba(255,209,102,0.1)",border:"rgba(255,209,102,0.3)"},
@@ -153,6 +233,7 @@ const TOPICS=[
   {id:"restaurant",emoji:"🍽️",label:"At a Restaurant",description:"Order food, talk to staff",color:"#FFD166"},
   {id:"student",emoji:"🎓",label:"Student Life",description:"School & college conversations",color:"#A78BFA"},
 ];
+
 const getSys=(topic,level,topicId)=>{
   const informal=topicId==="random"?"Reply in a casual, friendly, informal way like a real friend texting.":"Reply in a natural, context-appropriate way.";
   const rules={
@@ -171,6 +252,7 @@ ADVANCED RULES: Correct ALL mistakes strictly. Grammar, tense, punctuation, arti
   };
   return rules[level];
 };
+
 const highlightSentence=(sentence,corrections)=>{
   if(!corrections||corrections.length===0)return null;
   let result=sentence;
@@ -197,6 +279,13 @@ const call=async(h,sys)=>{
 };
 const parse=(t)=>{try{return JSON.parse(t.replace(/```json|```/g,"").trim())}catch{return{reply:t,corrections:[],isCorrect:true}}};
 
+/* Grammar score calc */
+const calcScore=(correct,total)=>{
+  if(total===0)return 100;
+  return Math.round((correct/total)*100);
+};
+const scoreColor=(s)=>s>=80?"#00D4AA":s>=50?"#FFD166":"#FF6B6B";
+
 function App(){
   const[screen,setScreen]=useState("welcome");
   const[level,setLevel]=useState(null);
@@ -205,12 +294,18 @@ function App(){
   const[input,setInput]=useState("");
   const[loading,setLoading]=useState(false);
   const[hist,setHist]=useState([]);
-  const[stats,setStats]=useState({correct:0,mistakes:0,streak:0});
+  const[stats,setStats]=useState({correct:0,mistakes:0,streak:0,total:0});
+  const[showXP,setShowXP]=useState(false);
   const endRef=useRef(null);
+
   useEffect(()=>{endRef.current?.scrollIntoView({behavior:"smooth"})},[msgs,loading]);
+
+  const grammarScore=calcScore(stats.correct,stats.total);
+
   const selectLevel=(lv)=>{setLevel(lv);setScreen("topic")};
   const startTopic=async(tp)=>{
     setTopic(tp);setMsgs([]);setHist([]);setScreen("chat");setLoading(true);
+    setStats({correct:0,mistakes:0,streak:0,total:0});
     const h=[{role:"user",content:"Start the conversation with a natural opening line."}];
     const text=await call(h,getSys(tp.label,level.id,tp.id));
     const p=parse(text);
@@ -227,132 +322,202 @@ function App(){
     const text=await call(nh,getSys(topic.label,level.id,topic.id));
     const p=parse(text);
     const correctedSentence=buildCorrected(m,p.corrections);
-    setStats(prev=>({correct:p.isCorrect?prev.correct+1:prev.correct,mistakes:prev.mistakes+(p.corrections?.length||0),streak:p.isCorrect?prev.streak+1:0}));
+    setStats(prev=>{
+      const newCorrect=p.isCorrect?prev.correct+1:prev.correct;
+      const newTotal=prev.total+1;
+      return{correct:newCorrect,mistakes:prev.mistakes+(p.corrections?.length||0),streak:p.isCorrect?prev.streak+1:0,total:newTotal};
+    });
+    if(p.isCorrect){setShowXP(true);setTimeout(()=>setShowXP(false),1800)}
     setMsgs(prev=>{const u=[...prev];u[u.length-1]={...entry,corrections:p.corrections||[],isCorrect:p.isCorrect,correctedSentence};return[...u,{role:"bot",content:p.reply}]});
     setHist([...nh,{role:"assistant",content:text}]);
     setLoading(false);
   };
 
+  /* ─────────── WELCOME ─────────── */
   if(screen==="welcome")return(
-    <div className="app"><div className="welcome">
-      <div className="glow1"/><div className="glow2"/>
-      <div className="welcome-inner">
-        <div className="a1"><div className="logo-badge">🗣️</div></div>
-        <div className="a1"><div className="tag-pill">✦ AI English Coach</div></div>
-        <h1 className="a2">Speak English<br/><em>Fluently with AI</em></h1>
-        <p className="welcome-sub a3">Chat naturally. Get instant grammar corrections. Improve every day — completely free.</p>
-        <div className="feat-grid a4">
-          <div className="feat-card"><div className="feat-icon">✍️</div><div className="feat-name">Grammar Fix</div><div className="feat-text">Instant corrections as you type</div></div>
-          <div className="feat-card"><div className="feat-icon">📘</div><div className="feat-name">Explanations</div><div className="feat-text">Learn why each mistake happened</div></div>
-          <div className="feat-card"><div className="feat-icon">🔥</div><div className="feat-name">Streaks</div><div className="feat-text">Daily streaks keep you going</div></div>
-          <div className="feat-card"><div className="feat-icon">🎭</div><div className="feat-name">Scenarios</div><div className="feat-text">Real life situations to practice</div></div>
+    <div className="app">
+      <div className="orbs"><div className="orb orb1"/><div className="orb orb2"/><div className="orb orb3"/></div>
+      <div className="noise"/>
+      <div className="welcome">
+        <div className="welcome-inner">
+          <div className="a1"><div className="ai-badge"><span className="ai-live-dot"/>🤖 Powered by Claude AI</div></div>
+          <div className="a1"><div className="logo-badge">🗣️</div></div>
+          <h1 className="a2">Your Personal<br/><em>English Coach</em></h1>
+          <p className="welcome-sub a3">Chat naturally, get instant AI grammar corrections, and improve your English every single day — completely free.</p>
+
+          {/* Live demo preview */}
+          <div className="demo-card a3">
+            <div className="demo-label"><span/>Live Preview<span/></div>
+            <div className="demo-user-bubble">"I goes to school yesterday"</div>
+            <div className="demo-error-row">
+              <span className="demo-fix">goes</span>
+              <span className="demo-arr">→</span>
+              <span className="demo-ok">went</span>
+              <span style={{color:"var(--muted)",fontSize:"11px",marginLeft:"auto"}}>❌ Tense error</span>
+            </div>
+            <div className="demo-ai-bubble">✅ Got it! You mean "I went to school yesterday." Let's keep going!</div>
+          </div>
+
+          {/* Stats row */}
+          <div className="stats-hero a4">
+            <div className="stat-hero"><div className="stat-hero-num">50K+</div><div className="stat-hero-label">Learners</div></div>
+            <div className="stat-hero"><div className="stat-hero-num">1M+</div><div className="stat-hero-label">Corrections</div></div>
+            <div className="stat-hero"><div className="stat-hero-num">100%</div><div className="stat-hero-label">Free</div></div>
+          </div>
+
+          <div className="feat-grid a4">
+            <div className="feat-card"><div className="feat-icon">✍️</div><div className="feat-name">Grammar Fix</div><div className="feat-text">Instant AI corrections as you type</div></div>
+            <div className="feat-card"><div className="feat-icon">📘</div><div className="feat-name">Explanations</div><div className="feat-text">Learn why each mistake happened</div></div>
+            <div className="feat-card"><div className="feat-icon">🔥</div><div className="feat-name">Streaks</div><div className="feat-text">Daily streaks keep you motivated</div></div>
+            <div className="feat-card"><div className="feat-icon">🎭</div><div className="feat-name">Scenarios</div><div className="feat-text">Real life situations to practice</div></div>
+          </div>
+          <p className="made-by a5">✦ Made with ❤️ by <b>Arshad</b> ✦</p>
+          <button className="start-btn a6" onClick={()=>setScreen("level")}>Start Speaking Now →</button>
         </div>
-        <p className="made-by a5">✦ Made with ❤️ by <b>Arshad</b> ✦</p>
-        <button className="start-btn a6" onClick={()=>setScreen("level")}>Start Speaking Now →</button>
       </div>
-    </div></div>
+    </div>
   );
 
+  /* ─────────── LEVEL ─────────── */
   if(screen==="level")return(
-    <div className="app"><div className="level-screen">
-      <div className="top-header">
-        <button className="back-btn" onClick={()=>setScreen("welcome")}>‹</button>
-        <h2 className="a1">Choose Level</h2>
-        <p className="a1">Pick what matches your English</p>
-      </div>
-      <div className="levels-list">
-        {LEVELS.map((lv,i)=>(
-          <div className={`level-card a${i+2}`} key={lv.id} onClick={()=>selectLevel(lv)} style={{background:lv.bg,borderColor:lv.border}}>
-            <div className="level-icon" style={{background:lv.color+"28"}}>{lv.emoji}</div>
-            <div style={{flex:1}}>
-              <div className="level-name" style={{color:lv.color}}>{lv.label}</div>
-              <div className="level-desc">{lv.desc}</div>
-            </div>
-            <div className="level-card-arrow">›</div>
-          </div>
-        ))}
-      </div>
-    </div></div>
-  );
-
-  if(screen==="topic")return(
-    <div className="app"><div className="topic-screen">
-      <div className="top-header">
-        <button className="back-btn" onClick={()=>setScreen("level")}>‹</button>
-        <div className="level-pill a1" style={{background:level.bg,color:level.color,border:`1px solid ${level.border}`}}>{level.emoji} {level.label} Level</div>
-        <h2 className="a1">Pick a Scenario</h2>
-        <p className="a1">Choose a situation to practice</p>
-      </div>
-      <div className="topics-list">
-        {TOPICS.map((tp,i)=>(
-          <div className={`topic-card a${i+2}`} key={tp.id} onClick={()=>startTopic(tp)}>
-            <div className="topic-icon" style={{background:tp.color+"22"}}>{tp.emoji}</div>
-            <div style={{flex:1}}>
-              <div className="topic-name">{tp.label}</div>
-              <div className="topic-desc">{tp.description}</div>
-            </div>
-            <div className="topic-card-arrow">›</div>
-          </div>
-        ))}
-      </div>
-      <div className="stats-bar a6">
-        <div className="stat"><div className="stat-num" style={{color:"var(--green)"}}>{stats.correct}</div><div className="stat-label">Correct</div></div>
-        <div className="stat"><div className="stat-num" style={{color:"var(--red)"}}>{stats.mistakes}</div><div className="stat-label">Fixed</div></div>
-        <div className="stat"><div className="stat-num" style={{color:"var(--yellow)"}}>🔥{stats.streak}</div><div className="stat-label">Streak</div></div>
-      </div>
-    </div></div>
-  );
-
-  return(
-    <div className="app"><div className="chat-screen">
-      <div className="chat-header">
-        <button className="chat-back" onClick={()=>setScreen("topic")}>‹</button>
-        <div style={{flex:1}}>
-          <div className="chat-topic-name">{topic?.emoji} {topic?.label}</div>
-          <div className="chat-topic-sub">{level?.emoji} {level?.label} · Corrections ON</div>
+    <div className="app">
+      <div className="orbs"><div className="orb orb1"/><div className="orb orb2"/><div className="orb orb3"/></div>
+      <div className="noise"/>
+      <div className="level-screen">
+        <div className="top-header">
+          <button className="back-btn" onClick={()=>setScreen("welcome")}>‹</button>
+          <h2 className="a1">Choose Level</h2>
+          <p className="a1">Pick what matches your English</p>
         </div>
-        <div className="streak-pill">🔥 {stats.streak}</div>
-      </div>
-      <div className="messages">
-        {msgs.map((msg,i)=>(
-          <div key={i} className={`msg-row ${msg.role}`}>
-            <div className={`bubble ${msg.role}`}>{msg.content}</div>
-            {msg.role==="user"&&msg.isCorrect===true&&msg.corrections!==null&&(
-              <div className="perfect-tag">✅ Perfect sentence!</div>
-            )}
-            {msg.role==="user"&&msg.corrections&&msg.corrections.length>0&&(
-              <div className="correction-box">
-                <div className="sentence-display">
-                  {highlightSentence(msg.content,msg.corrections)||msg.content}
-                </div>
-                {msg.correctedSentence&&(
-                  <div className="corrected-full">✅ {msg.correctedSentence}</div>
-                )}
-                {msg.corrections.map((c,j)=>(
-                  <div key={j} className="correction-item">
-                    <div className={`type-badge ${c.type==="suggestion"?"type-suggest":"type-error"}`}>
-                      {c.type==="suggestion"?"💡 Suggestion":"❌ Error"}
-                    </div>
-                    <div className="c-row">
-                      <span className="c-wrong">{c.wrong}</span>
-                      <span className="c-arrow">→</span>
-                      <span className={c.type==="suggestion"?"c-suggest":"c-right"}>{c.correct}</span>
-                    </div>
-                    <div className="c-explain">📘 {c.explanation}</div>
-                  </div>
-                ))}
+        <div className="levels-list">
+          {LEVELS.map((lv,i)=>(
+            <div className={`level-card a${i+2}`} key={lv.id} onClick={()=>selectLevel(lv)} style={{background:lv.bg,borderColor:lv.border}}>
+              <div className="level-icon" style={{background:lv.color+"28"}}>{lv.emoji}</div>
+              <div style={{flex:1}}>
+                <div className="level-name" style={{color:lv.color}}>{lv.label}</div>
+                <div className="level-desc">{lv.desc}</div>
               </div>
-            )}
+              <div className="level-card-arrow">›</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  /* ─────────── TOPIC ─────────── */
+  if(screen==="topic")return(
+    <div className="app">
+      <div className="orbs"><div className="orb orb1"/><div className="orb orb2"/><div className="orb orb3"/></div>
+      <div className="noise"/>
+      <div className="topic-screen">
+        <div className="top-header">
+          <button className="back-btn" onClick={()=>setScreen("level")}>‹</button>
+          <div className="level-pill a1" style={{background:level.bg,color:level.color,border:`1px solid ${level.border}`}}>{level.emoji} {level.label} Level</div>
+          <h2 className="a1">Pick a Scenario</h2>
+          <p className="a1">Choose a situation to practice</p>
+        </div>
+        <div className="topics-list">
+          {TOPICS.map((tp,i)=>(
+            <div className={`topic-card a${i+2}`} key={tp.id} onClick={()=>startTopic(tp)}>
+              <div className="topic-icon" style={{background:tp.color+"22"}}>{tp.emoji}</div>
+              <div style={{flex:1}}>
+                <div className="topic-name">{tp.label}</div>
+                <div className="topic-desc">{tp.description}</div>
+              </div>
+              <div className="topic-card-arrow">›</div>
+            </div>
+          ))}
+        </div>
+        <div className="stats-bar a6">
+          <div className="stat"><div className="stat-num" style={{color:"var(--green)"}}>{stats.correct}</div><div className="stat-label">Correct</div></div>
+          <div className="stat"><div className="stat-num" style={{color:"var(--red)"}}>{stats.mistakes}</div><div className="stat-label">Fixed</div></div>
+          <div className="stat"><div className="stat-num" style={{color:"var(--yellow)"}}>🔥{stats.streak}</div><div className="stat-label">Streak</div></div>
+        </div>
+      </div>
+    </div>
+  );
+
+  /* ─────────── CHAT ─────────── */
+  return(
+    <div className="app">
+      <div className="orbs"><div className="orb orb1"/><div className="orb orb2"/><div className="orb orb3"/></div>
+      <div className="noise"/>
+      <div className="chat-screen">
+        <div className="chat-header">
+          <button className="chat-back" onClick={()=>setScreen("topic")}>‹</button>
+          <div style={{flex:1}}>
+            <div className="chat-topic-name">{topic?.emoji} {topic?.label}</div>
+            <div className="chat-topic-sub"><span className="live-dot"/>AI Active · {level?.emoji} {level?.label}</div>
           </div>
-        ))}
-        {loading&&<div className="msg-row bot"><div className="typing-dots"><div className="dot"/><div className="dot"/><div className="dot"/></div></div>}
-        <div ref={endRef}/>
+          {/* Grammar Score */}
+          <div className="score-widget">
+            <div className="score-label-sm">Score</div>
+            <div className="score-num" style={{color:scoreColor(grammarScore)}}>{grammarScore}%</div>
+            <div className="score-bar"><div className="score-fill" style={{width:`${grammarScore}%`,background:`linear-gradient(90deg,${scoreColor(grammarScore)},${scoreColor(grammarScore)}88)`}}/></div>
+          </div>
+          <div className="streak-pill">🔥 {stats.streak}</div>
+        </div>
+
+        <div className="messages">
+          {msgs.map((msg,i)=>(
+            <div key={i} className={`msg-row ${msg.role}`}>
+              {msg.role==="bot"&&<div className="bot-label">🤖 SpeakRight AI</div>}
+              <div className={`bubble ${msg.role}`}>{msg.content}</div>
+              {msg.role==="user"&&msg.isCorrect===true&&msg.corrections!==null&&(
+                <div className="perfect-tag">✅ Perfect sentence!</div>
+              )}
+              {msg.role==="user"&&msg.corrections&&msg.corrections.length>0&&(
+                <div className="correction-box">
+                  <div className="corr-header">🔍 Grammar Analysis</div>
+                  <div className="sentence-display">
+                    {highlightSentence(msg.content,msg.corrections)||msg.content}
+                  </div>
+                  {msg.correctedSentence&&(
+                    <div className="corrected-full">✅ {msg.correctedSentence}</div>
+                  )}
+                  {msg.corrections.map((c,j)=>(
+                    <div key={j} className="correction-item">
+                      <div className={`type-badge ${c.type==="suggestion"?"type-suggest":"type-error"}`}>
+                        {c.type==="suggestion"?"💡 Suggestion":"❌ Error"}
+                      </div>
+                      <div className="c-row">
+                        <span className="c-wrong">{c.wrong}</span>
+                        <span className="c-arrow">→</span>
+                        <span className={c.type==="suggestion"?"c-suggest":"c-right"}>{c.correct}</span>
+                      </div>
+                      <div className="c-explain">📘 {c.explanation}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {/* XP popup on correct messages */}
+              {msg.role==="user"&&showXP&&i===msgs.length-2&&(
+                <div className="xp-popup">+10 XP ✨</div>
+              )}
+            </div>
+          ))}
+          {loading&&(
+            <div className="msg-row bot">
+              <div className="bot-label">🤖 SpeakRight AI</div>
+              <div className="bot-typing">
+                <div className="analyzing-label">
+                  🧠 Analyzing your English...
+                  <div className="analyzing-bar"><div className="analyzing-fill"/></div>
+                </div>
+                <div className="typing-dots"><div className="dot"/><div className="dot"/><div className="dot"/></div>
+              </div>
+            </div>
+          )}
+          <div ref={endRef}/>
+        </div>
+
+        <div className="input-area">
+          <textarea className="msg-input" value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send()}}} placeholder="Type your reply in English..." rows={1}/>
+          <button className="send-btn" onClick={send} disabled={loading||!input.trim()}>↑</button>
+        </div>
       </div>
-      <div className="input-area">
-        <textarea className="msg-input" value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send()}}} placeholder="Type your reply in English..." rows={1}/>
-        <button className="send-btn" onClick={send} disabled={loading||!input.trim()}>↑</button>
-      </div>
-    </div></div>
+    </div>
   );
 }
 ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
