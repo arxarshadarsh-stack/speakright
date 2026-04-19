@@ -147,8 +147,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .stat-label{font-size:10.5px;color:var(--muted);margin-top:3px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase}
 
 /* ── CHAT SCREEN ── */
-.chat-screen{min-height:100vh;background:transparent;display:flex;flex-direction:column;position:relative;z-index:2}
-.chat-header{padding:46px 16px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,0.07);background:rgba(5,5,8,0.82);backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px)}
+.chat-screen{height:100vh;background:transparent;display:flex;flex-direction:column;position:relative;z-index:2;overflow:hidden}
+.chat-header{flex-shrink:0;padding:46px 16px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,0.07);background:rgba(5,5,8,0.82);backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px)}
 .chat-back{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:var(--text);border-radius:12px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;flex-shrink:0;transition:all 0.25s}
 .chat-back:hover{background:rgba(124,111,255,0.12);border-color:rgba(124,111,255,0.35);box-shadow:0 0 20px rgba(124,111,255,0.15)}
 .chat-topic-name{font-weight:700;font-size:15px;line-height:1.2}
@@ -203,7 +203,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 
 .xp-popup{position:absolute;right:8px;top:-8px;font-size:13px;font-weight:800;color:var(--green);animation:xpFloat 1.6s ease forwards;pointer-events:none;text-shadow:0 0 12px rgba(0,212,170,0.6);z-index:10}
 
-.input-area{padding:10px 14px 30px;border-top:1px solid rgba(255,255,255,0.07);display:flex;gap:10px;align-items:flex-end;background:rgba(5,5,8,0.82);backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px)}
+.input-area{flex-shrink:0;padding:10px 14px 30px;border-top:1px solid rgba(255,255,255,0.07);display:flex;gap:10px;align-items:flex-end;background:rgba(5,5,8,0.82);backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px)}
 .msg-input{flex:1;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.09);border-radius:18px;padding:13px 17px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;outline:none;resize:none;transition:all 0.25s;backdrop-filter:blur(12px)}
 .msg-input::placeholder{color:var(--muted)}
 .msg-input:focus{border-color:rgba(124,111,255,0.5);background:rgba(124,111,255,0.06);box-shadow:0 0 0 4px rgba(124,111,255,0.08),0 4px 24px rgba(0,0,0,0.2)}
