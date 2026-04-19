@@ -604,21 +604,6 @@ function App(){
             <div className="demo-ai-bubble">✅ Got it! You mean "I went to school yesterday." Let's keep going!</div>
           </div>
 
-          {/* NEW: Social proof bar (replaces plain LEARN/APPLY/IMPROVE) */}
-          <div className="social-proof a4">
-            <div className="proof-stat">
-              <div className="proof-num">1,200+</div>
-              <div className="proof-label">Learners</div>
-            </div>
-            <div className="proof-stat">
-              <div className="proof-num">4.9 ★</div>
-              <div className="proof-label">Rating</div>
-            </div>
-            <div className="proof-stat">
-              <div className="proof-num">100%</div>
-              <div className="proof-label">Free</div>
-            </div>
-          </div>
 
           {/* ORIGINAL: Feature cards */}
           <div className="feat-grid a4">
@@ -628,25 +613,6 @@ function App(){
             <div className="feat-card"><div className="feat-icon">🏅</div><div className="feat-name">Badges</div><div className="feat-text">Earn rewards for your progress</div></div>
           </div>
 
-          {/* NEW: Testimonials section */}
-          <div className="testimonials-section a5">
-            <div className="section-title">What learners say</div>
-            <div className="testimonial-scroll">
-              {TESTIMONIALS.map((t,i)=>(
-                <div className="testimonial-card" key={i}>
-                  <div className="test-stars">{"★".repeat(t.stars)}</div>
-                  <div className="test-text">"{t.text}"</div>
-                  <div className="test-author">
-                    <span className="test-flag">{t.flag}</span>
-                    <div>
-                      <div className="test-name">{t.name}</div>
-                      <div className="test-role">{t.role}</div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
 
           {/* NEW: About / who built this */}
           <div className="about-card a5">
